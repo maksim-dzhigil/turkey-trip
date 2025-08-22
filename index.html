@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Путешествие по Турции — Поиск авиабилетов</title>
+    <meta name="description" content="Одностраничный сайт о путешествии в Турции с поиском авиабилетов." />
+    <style>
+      :root {
+        --bg: #0b1220;
+        --card: #ffffff;
+        --text: #0b1220;
+        --muted: #586174;
+        --brand: #0C73FE;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+        background: var(--bg);
+        color: #fff;
+        line-height: 1.5;
+      }
+      .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      header { display: grid; gap: 8px; padding: 40px 0 16px; }
+      header h1 { margin: 0; font-size: 36px; }
+      header p { margin: 0; color: #cbd5e1; }
+
+      .grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+      @media (min-width: 900px) { .grid { grid-template-columns: 1.1fr 0.9fr; } }
+
+      .card {
+        background: var(--card);
+        color: var(--text);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      }
+      .card h2 { margin: 0 0 10px; font-size: 22px; }
+      .card p { margin: 0 0 12px; color: var(--muted); }
+      .list { margin: 12px 0 0; padding-left: 18px; }
+      .list li { margin: 6px 0; }
+
+      footer { color: #cbd5e1; font-size: 14px; padding: 28px 0 60px; }
+      a.btn {
+        display: inline-block; background: var(--brand); color: #fff; text-decoration: none;
+        padding: 10px 14px; border-radius: 10px; font-weight: 700;
+      }
+
+      /* Top widgets: equal-size cards and toggle animation */
+      #top-widgets { 
+        display: grid; 
+        gap: 16px; 
+        grid-template-columns: 1fr; 
+        transition: height 380ms ease, opacity 250ms ease, grid-template-columns 280ms ease, grid-template-rows 280ms ease; 
+        overflow: hidden; 
+      }
+               @media (min-width: 900px) {
+           #top-widgets { 
+             /* управляемые переменными размеры треков сетки */
+             grid-template-columns: var(--c1, 1fr) var(--c2, 1fr);
+             grid-template-rows: var(--r1, 322px) var(--r2, 322px);
+           }
+         }
+         #top-widgets .card {
+           height: 322px; /* мобильная/узкая ширина — фиксированная высота */
+        display: flex; 
+        flex-direction: column; 
+      }
+      @media (min-width: 900px) { #top-widgets .card { height: auto; } }
+      #top-widgets .card h2 { margin-bottom: 12px; }
+      #top-widgets .widget-box { 
+        flex: 1; 
+        overflow: auto; 
+        border-radius: 12px; 
+      }
+      #top-widgets .ticket-links { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+      
+      /* Other-destinations details panel */
+      #dest-details { 
+        margin-top: 12px; 
+        transition: height 380ms ease, opacity 250ms ease; 
+        overflow: hidden; 
+      }
+      #dest-details .content-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+      @media (min-width: 900px) { #dest-details .content-grid { grid-template-columns: 1fr 1fr; } }
+
+      /* Hotels map panel */
+      #hotels-widget {
+        transition: height 380ms ease, opacity 250ms ease;
+        overflow: hidden;
+      }
+
+      /* Stays (apartments) section */
+      #stays .tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 6px 0 12px; }
+      #stays .tab {
+        background: #eef2ff; color: #1e293b; border: 0; border-radius: 10px; padding: 8px 12px; font-weight: 700; cursor: pointer;
+      }
+      #stays .tab.active { background: var(--brand); color: #fff; }
+      .listing-grid { display:grid; gap:16px; grid-template-columns: 1fr; }
+      @media (min-width: 900px) { .listing-grid { grid-template-columns: repeat(2, 1fr); } }
+      .listing-card { display:flex; flex-direction: column; gap: 10px; background: #f8fafc; color: var(--text); border-radius: 12px; padding: 12px; }
+      .listing-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; background: #e2e8f0; }
+      .listing-card .row { display:flex; align-items:center; justify-content: space-between; gap: 10px; }
+      .listing-card .price { font-weight: 800; color: var(--brand); }
+      .muted { color: var(--muted); font-size: 14px; }
+      #stays .map-links { display:flex; gap:8px; flex-wrap:wrap; margin: 0; }
+      #stays .stays-head { display:flex; justify-content: space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom: 12px; }
+
+      /* Cappadocia hero */
+      .cap-hero {
+        background: linear-gradient(135deg, #0C73FE 0%, #2563EB 60%, #1D4ED8 100%);
+        color: #fff;
+      }
+      .cap-hero h2 { color: #fff; margin: 0 0 8px; font-size: 26px; }
+      .cap-hero .hero-sub { margin: 0 0 14px; color: #e2e8f0; }
+      .cap-hero .hero-head { display:flex; align-items:center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+      .cap-hero .badge { display:inline-block; background: rgba(255,255,255,0.16); color: #fff; border-radius: 999px; padding: 6px 10px; font-weight: 800; }
+      .hero-links { display:flex; gap:12px; flex-wrap:wrap; }
+      .cap-hero a { color: #fff; text-decoration: underline; }
+      .cap-slider { position: relative; height: 390px; border-radius: 12px; overflow: hidden; margin: 8px 0 6px; }
+      .cap-slider img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 600ms ease; }
+      .cap-slider img.active { opacity: 1; }
+
+      /* Other destinations horizontal slider */
+      .hz-slider { position: relative; }
+      .hz-viewport { overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; }
+      .hz-track { display: flex; gap: 12px; padding-bottom: 8px; }
+      .hz-card { min-width: 260px; background: #f8fafc; color: var(--text); border-radius: 12px; overflow: hidden; }
+      .hz-card { scroll-snap-align: start; }
+      .hz-card img { width: 100%; height: 140px; object-fit: cover; background: #e2e8f0; }
+      .hz-card .content { padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .hz-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(12,115,254,0.95); color: #fff; border: 0; width: 36px; height: 36px; border-radius: 999px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+      .hz-nav[disabled] { opacity: 0.4; cursor: default; }
+      .hz-prev { left: -10px; }
+      .hz-next { right: -10px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Путешествие по Турции</h1>
+      </header>
+
+      <div style="margin: 8px 0 24px; display:flex; gap:8px; flex-wrap:wrap;">
+        <a id="toggle-widgets" href="#" class="btn">Авиабилеты</a>
+        <a id="toggle-hotels" href="#" class="btn">Отели прицениться</a>
+      </div>
+
+      <section id="top-widgets" style="margin-top: 12px; margin-bottom: 24px; display: none; height: 0; opacity: 0;">
+        <section class="card">
+          <h2>Москва → Стамбул · 16.09</h2>
+          <div class="widget-box">
+            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=MOW&destination=IST&date=2025-09-16" charset="utf-8"></script>
+          </div>
+          <div class="ticket-links">
+            <a class="btn" href="https://www.aviasales.ru/booking?partner=aviasales-ota&order_id=bf55a227-1063-4482-b7b3-77b30edd8bd1" target="_blank" rel="noopener">Прилететь в 15:05 IST из мск — $225</a>
+            <a class="btn" href="https://www.aviasales.ru/search/MOW1609IST1" target="_blank" rel="noopener">Все рейсы 16.09 · Москва → Стамбул</a>
+          </div>
+        </section>
+        <section class="card">
+          <h2>Ташкент → Стамбул · 16.09</h2>
+          <div class="widget-box">
+            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=TAS&destination=IST&date=2025-09-16" charset="utf-8"></script>
+          </div>
+          <div class="ticket-links">
+            <a class="btn" href="https://booking.uzairways.com/ru/booking/personal/66ec11201b49c/681029d95dc4f.html?aci=100&marker=nza335tu0ggw&payload=MzJjMDY0ODE4NTY1ZDFmMjg2MjZjYTI4ODliMTM4MDA6MTg3OTcuMDAwMDAwOlJVQg==" target="_blank" rel="noopener">Прилететь в 11:00 IST из Ташкента — $225</a>
+            <a class="btn" href="https://www.aviasales.ru/search/TAS1609IST1" target="_blank" rel="noopener">Все рейсы 16.09 · Ташкент → Стамбул</a>
+          </div>
+        </section>
+        <section class="card">
+          <h2>Стамбул → Москва · 26.09</h2>
+          <div class="widget-box">
+            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=IST&destination=MOW&date=2025-09-26" charset="utf-8"></script>
+          </div>
+        </section>
+        <section class="card">
+          <h2>Стамбул → Ташкент · 26.09</h2>
+          <div class="widget-box">
+            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=IST&destination=TAS&date=2025-09-26" charset="utf-8"></script>
+          </div>
+        </section>
+      </section>
+      
+      
+
+      
+      
+      <section id="hotels-widget" class="card" style="margin-bottom: 24px; display: none; height: 0; opacity: 0;">
+        <h2>Карта отелей прицениться</h2>
+        <p style="margin: 0 0 12px; color: var(--muted);">Бейоглу в Стамбуле, как Невский в Питере</p>
+        <div class="widget-box" style="height: 520px;">
+          <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&search_host=search.hotellook.com&locale=ru&powered_by=true&draggable=true&disable_zoom=true&show_logo=true&scrollwheel=false&color=%2307AF61&contrast_color=%23ffffff&width=1000&height=500&lat=41.02861&lng=28.97472&zoom=15&radius=60&stars=0&rating_from=0&rating_to=10&promo_id=4285&campaign_id=101" charset="utf-8"></script>
+        </div>
+      </section>
+      
+
+      <section id="stays" class="card" style="margin-bottom: 24px;">
+        <div class="stays-head">
+          <div>
+            <h2 style="margin:0 0 6px;">Квартиры в Бейоглу, 2 спальни</h2>
+            <div class="tabs" role="tablist" aria-label="Выбор площадки">
+              <button class="tab active" role="tab" aria-selected="true" data-source="airbnb">Airbnb</button>
+              <button class="tab" role="tab" aria-selected="false" data-source="booking">Booking</button>
+            </div>
+          </div>
+          <div class="map-links">
+            <a class="btn" href="https://www.airbnb.com/s/Istanbul--T%C3%BCrkiye/homes?refinement_paths%5B%5D=%2Fhomes&place_id=ChIJexVgWlG2yhQR6B1akfSarCI&date_picker_type=calendar&checkin=2025-09-16&checkout=2025-09-19&adults=2&source=structured_search_input_header&search_type=user_map_move&query=Istanbul%2C%20T%C3%BCrkiye&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2025-09-01&monthly_length=3&monthly_end_date=2025-12-01&search_mode=regular_search&price_filter_input_type=2&price_filter_num_nights=3&channel=EXPLORE&min_bedrooms=2&selected_filter_order%5B%5D=min_bedrooms%3A2&selected_filter_order%5B%5D=min_beds%3A2&selected_filter_order%5B%5D=min_bathrooms%3A1&selected_filter_order%5B%5D=amenities%3A4&selected_filter_order%5B%5D=amenities%3A5&selected_filter_order%5B%5D=amenities%3A45&selected_filter_order%5B%5D=price_max%3A268&update_selected_filters=true&min_beds=2&min_bathrooms=1&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&ne_lat=41.04831779771419&ne_lng=28.994398927536707&sw_lat=41.01715039758059&sw_lng=28.9580644815793&zoom=14.807748524241768&zoom_level=14.807748524241768&search_by_map=true&price_max=268" target="_blank" rel="noopener">Карта Airbnb</a>
+            <a class="btn" href="https://www.booking.com/searchresults.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ss=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&ssne=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&ssne_untouched=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&efdco=1&lang=ru&src=city&dest_id=-739274&dest_type=city&checkin=2025-09-16&checkout=2025-09-19&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bentire_place_bedroom_count%3D2%3Bdi%3D4310" target="_blank" rel="noopener">Карта Booking</a>
+          </div>
+        </div>
+        <div class="listing-grid" id="airbnb-list" role="tabpanel" aria-labelledby="airbnb" style="display: grid;">
+          <article class="listing-card">
+            <img alt="Airbnb listing 1" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.airbnb.com/rooms/1153718763091125099" />
+            <div class="row">
+              <div>
+                <strong>Airbnb · 2 гостя · Бейоглу</strong>
+                <div class="muted">16.09–19.09</div>
+              </div>
+              <div class="price">$228 / 3 ночи</div>
+            </div>
+            <div class="row">
+              <a class="btn" href="https://www.airbnb.com/rooms/1153718763091125099?adults=2&check_in=2025-09-16&check_out=2025-09-19&search_mode=regular_search&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&source_impression_id=p3_1755840770_P3Ud3qLX3Up3CVmo&previous_page_section_name=1000&federated_search_id=SKELETON" target="_blank" rel="noopener">Забронировать</a>
+            </div>
+          </article>
+          <article class="listing-card">
+            <img alt="Airbnb listing 2" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.airbnb.com/rooms/1072224332101678418" />
+            <div class="row">
+              <div>
+                <strong>Airbnb · 2 гостя · Бейоглу</strong>
+                <div class="muted">16.09–19.09</div>
+              </div>
+              <div class="price">$227 / 3 ночи</div>
+            </div>
+            <div class="row">
+              <a class="btn" href="https://www.airbnb.com/rooms/1072224332101678418?adults=2&check_in=2025-09-16&check_out=2025-09-19&search_mode=regular_search&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&source_impression_id=p3_1755840770_P3Xan6M3rHN-tJoS&previous_page_section_name=1000&federated_search_id=SKELETON" target="_blank" rel="noopener">Забронировать</a>
+            </div>
+          </article>
+        </div>
+        <div class="listing-grid" id="booking-list" role="tabpanel" aria-labelledby="booking" style="display: none;">
+          <article class="listing-card">
+            <img alt="Booking Ottoman Concept Taksim" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.booking.com/hotel/tr/ottoman-concept-taksim.html" />
+            <div class="row">
+              <div>
+                <strong>Ottoman Concept Taksim</strong>
+                <div class="muted">$80 / ночь · от 2 ночей</div>
+              </div>
+              <div class="price">16.09–19.09</div>
+            </div>
+            <div class="row">
+              <a class="btn" href="https://www.booking.com/hotel/tr/ottoman-concept-taksim.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ucfs=1&checkin=2025-09-16&checkout=2025-09-19&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bmealplan%3D1%3Bdi%3D4310%3Bentire_place_bedroom_count%3D2&srpvid=9a3a281b147b0015&srepoch=1755841727&matching_block_id=1447894902_417605791_2_1_0&atlas_src=sr_iw_title" target="_blank" rel="noopener">Забронировать</a>
+            </div>
+          </article>
+          <article class="listing-card">
+            <img alt="Booking Patika Suites" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.booking.com/hotel/tr/apartment-patika-suites.html" />
+            <div class="row">
+              <div>
+                <strong>Apartment Patika Suites</strong>
+                <div class="muted">$65–75 / ночь</div>
+              </div>
+              <div class="price">16.09–19.09</div>
+            </div>
+            <div class="row">
+              <a class="btn" href="https://www.booking.com/hotel/tr/apartment-patika-suites.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ucfs=1&checkin=2025-09-16&checkout=2025-09-19&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bentire_place_bedroom_count%3D2%3Bdi%3D4310&srpvid=9a3a281b147b0015&srepoch=1755841785&matching_block_id=117200504_88799095_2_0_0&atlas_src=sr_iw_title" target="_blank" rel="noopener">Забронировать</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="card cap-hero" style="margin-bottom: 24px;">
+        <div class="hero-head">
+          <h2>Каппадокия — мастхев</h2>
+          <span class="badge">Главное место поездки</span>
+        </div>
+        <div class="cap-slider" id="cap-slider">
+          <img src="imgs/cappadocia/gettyimages-1474856123-640x640.jpg" alt="Cappadocia balloons 1" class="active"/>
+          <img src="imgs/cappadocia/istockphoto-1339815445-612x612.jpg" alt="Cappadocia balloons 2"/>
+          <img src="imgs/cappadocia/1000_F_400322393_233wcYTtlY7BY8knHpZo6qFEaayNTqhL.jpg" alt="Cappadocia balloons 3"/>
+          <img src="imgs/cappadocia/caption.jpg" alt="Cappadocia balloons 4"/>
+          <img src="imgs/cappadocia/colorful-hot-air-balloons-flying-rock-landscape-cappadocia-turkey_87498-238.avif" alt="Cappadocia balloons 5"/>
+        </div>
+        <p class="hero-sub">Самое сердце — Гёреме. Смотреть на шары и летать на них. Цены зависят от сезона, обычно ~$200/чел за общий полёт.</p>
+        <div class="hero-links" style="margin-bottom: 8px;">
+          <a href="https://www.google.com/maps/place/G%C3%B6reme,+Ayd%C4%B1nl%C4%B1+-+Orta,+50180+G%C3%B6reme%2FNev%C5%9Fehir+Merkez%2FNev%C5%9Fehir,+T%C3%BCrkiye/@38.6343288,34.8154416,11.67z/data=!4m6!3m5!1s0x152a6879d36bd1ab:0x466c4e17a23fae50!8m2!3d38.643056!4d34.828889!16zL20vMDU4ZmQ4?entry=ttu&g_ep=EgoyMDI1MDgxOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Гёреме на карте</a>
+          <a href="https://shmkapadokya.kapadokya.edu.tr/en/" target="_blank" rel="noopener">Прогноз полётов шаров</a>
+          <a href="https://experience.tripster.ru/experience/22686/?exp_partner=make-trip&utm_source=make-trip&utm_campaign=affiliates&utm_medium=link&utm_content=special-turkey&utm_term=IstambKapp&erid=Y1jgkD6uB783K4Grry82b5a1oYdV" target="_blank" rel="noopener">Тур из Стамбула (~$550)</a>
+          <a href="https://wa.me/905302586149" target="_blank" rel="noopener">WhatsApp менеджер</a>
+        </div>
+          <ul class="list" style="margin-bottom: 0;">
+            <li><strong>Тур "все включено" из Стамбула</strong>: можно заказать 2-дневный тур от дверей отеля (~$580/чел). Организаторы обеспечат трансферы до аэропорта, авиабилеты, встречу, проживание в пещерном отеле, питание и экскурсии по всем ключевым местам. Готовы поселить в разные номера или найти номер с раздельными спальнями. <a href="https://experience.tripster.ru/experience/22686/?exp_partner=make-trip" target="_blank" rel="noopener">Подробнее о туре</a>. Скидка при обращении напрямую к менеджеру в WhatsApp: <a href="https://wa.me/905302586149" target="_blank" rel="noopener">+90 530 258 61 49</a>.</li>
+            <li><strong>Самостоятельное путешествие</strong>: можно поехать без тура, самостоятельно купив авиабилеты до ближайшего города и добравшись на автобусе до Гёреме. В Гёреме можно арендовать жилье на Airbnb — <a href="https://www.airbnb.com/rooms/36251882?adults=2&check_in=2025-09-20&check_out=2025-09-23&guests=2&search_mode=regular_search&source_impression_id=p3_1755842776_P36Z_k-7bhhEzEmW&previous_page_section_name=1000&federated_search_id=0a53cb44-17b8-4ff5-9af6-2d6a16bc186c" target="_blank" rel="noopener">вариант 1</a> ($86/ночь) или <a href="https://www.airbnb.com/rooms/11877995?adults=2&check_in=2025-09-20&check_out=2025-09-23&guests=2&search_mode=regular_search&source_impression_id=p3_1755842776_P3uqtZ5Y8cVtDLJF&previous_page_section_name=1000&federated_search_id=0a53cb44-17b8-4ff5-9af6-2d6a16bc186c" target="_blank" rel="noopener">вариант 2</a> ($88/ночь), либо найти отель в пещере на <a href="https://www.tripadvisor.com/Search?q=Cappadocia+Cave+hotel&geo=297983&ssrc=a&searchNearby=false&searchSessionId=000d2c98d46de195.ssid&offset=0" target="_blank" rel="noopener">TripAdvisor</a> (мест мало или вообще уже нет). Питаться и возвращаться обратно придется тоже самостоятельно.</li>
+            <li><strong>Непопулярные точки для просмотра шаров</strong>: 38°38′59.85″N 34°50′45.02″E (будет ссылка) и 38.64710° N, 34.82450° E (будет ссылка) — тише, меньше людей. В первую точку обычно не проехать на машине.</li>
+            <li><strong>Билеты на шар</strong>: лучше покупать на месте, а не через сайт — через сайт могут продать запуск где-то издалека, а вживую можно выбрать шар в куче из десятков-сотен других шаров.</li>
+            <li><strong>Цены</strong>: $150–250/чел за общий полёт в корзине на 20 человек.</li>
+            <li><strong>Гид по Каппадокии</strong>: Instagram @i_am_touring_cappadocia — тур на двоих был $95 в 2023. Мне не ответили, возможно мертвый аккаут</li>
+          </ul>
+      </section>
+
+      <section class="card" id="other-destinations" style="margin-bottom: 24px;">
+        <div class="stays-head">
+          <h2 style="margin:0;">Другие места поездки</h2>
+        </div>
+        <div class="hz-slider">
+          <div class="hz-viewport" id="hz-viewport">
+            <div class="hz-track">
+              <article class="hz-card">
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Istanbul" alt="Стамбул" />
+                <div class="content">
+                  <strong>Стамбул</strong>
+                  <a class="btn" href="#" data-city="istanbul">Подробнее</a>
+                </div>
+              </article>
+              <article class="hz-card">
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Antalya" alt="Анталья" />
+                <div class="content">
+                  <strong>Анталья</strong>
+                  <a class="btn" href="#" data-city="antalya">Подробнее</a>
+                </div>
+              </article>
+              <article class="hz-card">
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Izmir" alt="Измир" />
+                <div class="content">
+                  <strong>Измир</strong>
+                  <a class="btn" href="#" data-city="izmir">Подробнее</a>
+                </div>
+              </article>
+              <article class="hz-card">
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Bodrum" alt="Бодрум" />
+                <div class="content">
+                  <strong>Бодрум</strong>
+                  <a class="btn" href="#" data-city="bodrum">Подробнее</a>
+                </div>
+              </article>
+              <article class="hz-card">
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Pamukkale" alt="Памуккале" />
+                <div class="content">
+                  <strong>Памуккале</strong>
+                  <a class="btn" href="#" data-city="pamukkale">Подробнее</a>
+                </div>
+              </article>
+              <article class="hz-card">
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Ephesus" alt="Эфес" />
+                <div class="content">
+                  <strong>Эфес</strong>
+                  <a class="btn" href="#" data-city="ephesus">Подробнее</a>
+                </div>
+              </article>
+            </div>
+          </div>
+          
+          <!-- Expandable details inside other-destinations -->
+          <div id="dest-details" style="display: none; height: 0; opacity: 0;">
+            <div class="content-grid city-content" data-city="istanbul" style="display: none;">
+              <section class="card">
+                <h2>Туры по Стамбулу</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <ul class="list" style="margin-top: 0;">
+                    <li><strong>[Название тура 1]</strong> — краткое описание. <a href="#" target="_blank" rel="noopener">[Ссылка]</a></li>
+                    <li><strong>[Название тура 2]</strong> — краткое описание. <a href="#" target="_blank" rel="noopener">[Ссылка]</a></li>
+                    <li><strong>[Название тура 3]</strong> — краткое описание. <a href="#" target="_blank" rel="noopener">[Ссылка]</a></li>
+                  </ul>
+                </div>
+              </section>
+              <section class="card">
+                <h2>Пешие маршруты (Google Карты)</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <ul class="list" style="margin-top: 0;">
+                    <li><strong>Маршрут 1</strong> — близко расположенные шикарные магазины для ваших выходных. <a href="https://maps.app.goo.gl/RGgriQZQKUPofW7K8?g_st=it" target="_blank" rel="noopener">Открыть карту</a></li>
+                    <li><strong>Маршрут 2</strong> — хорошие интерьерные винтажи и не только. <a href="https://maps.app.goo.gl/DRbwXqD51F12HVrt9?g_st=it" target="_blank" rel="noopener">Открыть карту</a></li>
+                    <li><strong>Маршрут 3</strong> — набережная, книжный с отличным видом, французский пассаж, Галатапорт с магазинами и лучшей пахлавой. <a href="https://maps.app.goo.gl/vBxgqqiXfKxrPmDp9?g_st=it" target="_blank" rel="noopener">Открыть карту</a></li>
+                    <li><strong>Маршрут 4</strong> — от Галатапорта через мечеть, парк и дворец‑музей. <a href="https://maps.app.goo.gl/59MHgmKFuUV1PF2Z7?g_st=it" target="_blank" rel="noopener">Открыть карту</a></li>
+                    <li><strong>Маршрут 5</strong> — красивые православные и католические церкви. <a href="https://maps.app.goo.gl/9Xu3hanALnyd1mc3A?g_st=it" target="_blank" rel="noopener">Открыть карту</a></li>
+                    <li><strong>Маршрут 6</strong> — «как в Париже»: маленький, но хороший музей (смотреть сверху вниз), чай 15:00–18:00 в отеле Агаты Кристи (в лобби напротив входа), магазин с рюкзаком Кати. <a href="https://maps.app.goo.gl/51EHNrhKvEno9GzSA?g_st=it" target="_blank" rel="noopener">Открыть карту</a></li>
+                    <li><strong>Маршрут 7</strong> — прогулка по набережной среди местных; нормальный рыбный ресторан у рыбного рынка. <a href="https://maps.app.goo.gl/qTm9zCGF8oPqH74j6?g_st=it" target="_blank" rel="noopener">Открыть карту</a></li>
+                    <li><strong>Маршрут 8</strong> — археологический музей, парк с журавлями и набережная на другой стороне. <a href="https://maps.app.goo.gl/3LyYCbmWxozX1kdt6?g_st=it" target="_blank" rel="noopener">Открыть карту</a></li>
+                  </ul>
+                </div>
+              </section>
+              <section class="card">
+                <h2>Что посетить</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <ul class="list" style="margin-top: 0;">
+                    <li>[Достопримечательность 1] — краткое описание места.</li>
+                    <li>[Достопримечательность 2] — краткое описание места.</li>
+                    <li>[Достопримечательность 3] — краткое описание места.</li>
+                    <li>[Достопримечательность 4] — краткое описание места.</li>
+                  </ul>
+                </div>
+              </section>
+              <section class="card">
+                <h2>Заметки и советы</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <p class="muted" style="margin: 0;">[Добавьте сюда полезные советы, лайфхаки, расписание паромов/мечетей, часы работы музеев и т. п.]</p>
+                </div>
+              </section>
+            </div>
+            <div class="content-grid city-content" data-city="antalya" style="display: none;">
+              <section class="card">
+                <h2>Анталья — информация</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <p class="muted" style="margin: 0;">[Скоро добавлю маршруты, туры и места для Антальи]</p>
+                </div>
+              </section>
+            </div>
+            <div class="content-grid city-content" data-city="izmir" style="display: none;">
+              <section class="card">
+                <h2>Измир — информация</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <p class="muted" style="margin: 0;">[Скоро добавлю маршруты, туры и места для Измира]</p>
+                </div>
+              </section>
+            </div>
+            <div class="content-grid city-content" data-city="bodrum" style="display: none;">
+              <section class="card">
+                <h2>Бодрум — информация</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <p class="muted" style="margin: 0;">[Скоро добавлю маршруты, туры и места для Бодрума]</p>
+                </div>
+              </section>
+            </div>
+            <div class="content-grid city-content" data-city="pamukkale" style="display: none;">
+              <section class="card">
+                <h2>Памуккале — информация</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <p class="muted" style="margin: 0;">[Скоро добавлю маршруты, туры и места для Памуккале]</p>
+                </div>
+              </section>
+            </div>
+            <div class="content-grid city-content" data-city="ephesus" style="display: none;">
+              <section class="card">
+                <h2>Эфес — информация</h2>
+                <div class="widget-box" style="padding: 12px; background: #f8fafc;">
+                  <p class="muted" style="margin: 0;">[Скоро добавлю маршруты, туры и места для Эфеса]</p>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+      </footer>
+    </div>
+    <script>
+      (function () {
+        // Tabs for stays
+        const tabButtons = document.querySelectorAll('#stays .tab');
+        const airbnbList = document.getElementById('airbnb-list');
+        const bookingList = document.getElementById('booking-list');
+        if (tabButtons.length && airbnbList && bookingList) {
+          tabButtons.forEach(btn => btn.addEventListener('click', () => {
+            tabButtons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+            const src = btn.getAttribute('data-source');
+            const showAirbnb = src === 'airbnb';
+            airbnbList.style.display = showAirbnb ? 'grid' : 'none';
+            bookingList.style.display = showAirbnb ? 'none' : 'grid';
+          }));
+        }
+
+        const wrapper = document.getElementById('top-widgets');
+        const toggle = document.getElementById('toggle-widgets');
+        if (!wrapper || !toggle) return;
+
+        let collapsed = true; // изначально скрыто
+        wrapper.style.display = 'none';
+        wrapper.style.height = '0px';
+        wrapper.style.opacity = '0';
+        toggle.textContent = 'Показать авиабилеты';
+
+        toggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (collapsed) {
+              // expand
+              wrapper.style.display = 'grid';
+              const target = wrapper.scrollHeight;
+              wrapper.style.height = '0px';
+              wrapper.style.opacity = '0';
+              requestAnimationFrame(() => {
+                wrapper.style.height = target + 'px';
+                wrapper.style.opacity = '1';
+              });
+              const onEnd = (ev) => {
+                if (ev.propertyName === 'height') {
+                  wrapper.style.height = '';
+                  wrapper.removeEventListener('transitionend', onEnd);
+                }
+              };
+              wrapper.addEventListener('transitionend', onEnd);
+            } else {
+              // collapse
+              const start = wrapper.scrollHeight;
+              wrapper.style.height = start + 'px';
+              requestAnimationFrame(() => {
+                wrapper.style.height = '0px';
+                wrapper.style.opacity = '0';
+              });
+              const onEnd = () => {
+                wrapper.style.display = 'none';
+                wrapper.removeEventListener('transitionend', onEnd);
+              };
+              wrapper.addEventListener('transitionend', onEnd);
+            }
+            collapsed = !collapsed;
+            toggle.textContent = collapsed ? 'Показать авиабилеты' : 'Скрыть авиабилеты';
+        });
+
+        // Dynamic resize of flight widgets on hover (desktop only)
+        const resizeInit = () => {
+          const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+          const cards = Array.from(wrapper.querySelectorAll('.card'));
+          if (!cards.length) return;
+
+          // helper to set grid track sizes via CSS variables
+          const setTracks = (colIndex, rowIndex) => {
+            if (!isDesktop) return resetTracks();
+            const big = '1.62fr';
+            const small = '0.38fr';
+            const bigH = '672px';
+            const smallH = '288px';
+            wrapper.style.setProperty('--c1', colIndex === 0 ? big : small);
+            wrapper.style.setProperty('--c2', colIndex === 1 ? big : small);
+            wrapper.style.setProperty('--r1', rowIndex === 0 ? bigH : smallH);
+            wrapper.style.setProperty('--r2', rowIndex === 1 ? bigH : smallH);
+          };
+
+          const resetTracks = () => {
+            wrapper.style.removeProperty('--c1');
+            wrapper.style.removeProperty('--c2');
+            wrapper.style.removeProperty('--r1');
+            wrapper.style.removeProperty('--r2');
+          };
+
+          // Clean previous listeners (if any) by cloning nodes
+          const reattach = () => {
+            const parent = wrapper;
+            const list = Array.from(parent.querySelectorAll('.card'));
+            list.forEach((node, i) => {
+              const col = i % 2; // 0 or 1
+              const row = Math.floor(i / 2); // 0 or 1 (we expect 4 cards)
+              node.addEventListener('mouseenter', () => setTracks(col, row));
+            });
+            parent.addEventListener('mouseleave', resetTracks);
+          };
+
+          resetTracks();
+          reattach();
+
+          // expose reset for other scopes
+          resizeInit.reset = resetTracks;
+        };
+
+        // initialize once widgets are first expanded (so sizes apply)
+        let resizeReady = false;
+        const ensureResizeInit = () => {
+          if (resizeReady) return;
+          resizeInit();
+          resizeReady = true;
+        };
+
+        // When opening the widgets, set up hover behavior
+        toggle.addEventListener('click', () => {
+          // If expanding, initialize after it's displayed
+          if (wrapper.style.display === 'grid') {
+            ensureResizeInit();
+          }
+        });
+
+        // Also init immediately in case the section is already open from cache
+        if (wrapper.style.display !== 'none') ensureResizeInit();
+
+        // Reset on resize under mobile breakpoint
+        window.addEventListener('resize', () => {
+          const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+          if (!isDesktop && typeof resizeInit.reset === 'function') {
+            resizeInit.reset();
+          }
+        });
+
+        // Hotels map toggle (mirrors flights)
+        const hotelsWrapper = document.getElementById('hotels-widget');
+        const hotelsToggle = document.getElementById('toggle-hotels');
+        if (hotelsWrapper && hotelsToggle) {
+          let hotelsCollapsed = true;
+          hotelsWrapper.style.display = 'none';
+          hotelsWrapper.style.height = '0px';
+          hotelsWrapper.style.opacity = '0';
+          hotelsToggle.textContent = 'Показать отели прицениться';
+
+          hotelsToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (hotelsCollapsed) {
+              hotelsWrapper.style.display = 'block';
+              const target = hotelsWrapper.scrollHeight;
+              hotelsWrapper.style.height = '0px';
+              hotelsWrapper.style.opacity = '0';
+              requestAnimationFrame(() => {
+                hotelsWrapper.style.height = target + 'px';
+                hotelsWrapper.style.opacity = '1';
+              });
+              const onEnd = (ev) => {
+                if (ev.propertyName === 'height') {
+                  hotelsWrapper.style.height = '';
+                  hotelsWrapper.removeEventListener('transitionend', onEnd);
+                }
+              };
+              hotelsWrapper.addEventListener('transitionend', onEnd);
+            } else {
+              const start = hotelsWrapper.scrollHeight;
+              hotelsWrapper.style.height = start + 'px';
+              requestAnimationFrame(() => {
+                hotelsWrapper.style.height = '0px';
+                hotelsWrapper.style.opacity = '0';
+              });
+              const onEnd = () => {
+                hotelsWrapper.style.display = 'none';
+                hotelsWrapper.removeEventListener('transitionend', onEnd);
+              };
+              hotelsWrapper.addEventListener('transitionend', onEnd);
+            }
+            hotelsCollapsed = !hotelsCollapsed;
+            hotelsToggle.textContent = hotelsCollapsed ? 'Показать отели прицениться' : 'Скрыть отели прицениться';
+          });
+        }
+
+        // Istanbul widgets toggle & hover-resize (mirrors flights)
+        const istWrapper = document.getElementById('istanbul-widgets');
+        const istToggle = document.getElementById('toggle-istanbul');
+        if (istWrapper && istToggle) {
+          let istCollapsed = true;
+          istWrapper.style.display = 'none';
+          istWrapper.style.height = '0px';
+          istWrapper.style.opacity = '0';
+          istToggle.textContent = 'Показать Стамбул';
+
+          istToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (istCollapsed) {
+              istWrapper.style.display = 'grid';
+              const target = istWrapper.scrollHeight;
+              istWrapper.style.height = '0px';
+              istWrapper.style.opacity = '0'; 
+              requestAnimationFrame(() => {
+                istWrapper.style.height = target + 'px';
+                istWrapper.style.opacity = '1';
+              });
+              const onEnd = (ev) => {
+                if (ev.propertyName === 'height') {
+                  istWrapper.style.height = '';
+                  istWrapper.removeEventListener('transitionend', onEnd);
+                }
+              };
+              istWrapper.addEventListener('transitionend', onEnd);
+            } else {
+              const start = istWrapper.scrollHeight;
+              istWrapper.style.height = start + 'px';
+              requestAnimationFrame(() => {
+                istWrapper.style.height = '0px';
+                istWrapper.style.opacity = '0';
+              });
+              const onEnd = () => {
+                istWrapper.style.display = 'none';
+                istWrapper.removeEventListener('transitionend', onEnd);
+              };
+              istWrapper.addEventListener('transitionend', onEnd);
+            }
+            istCollapsed = !istCollapsed;
+            istToggle.textContent = istCollapsed ? 'Показать Стамбул' : 'Скрыть Стамбул';
+          });
+
+          // hover-resize on desktop
+          const istResizeInit = () => {
+            const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+            const cards = Array.from(istWrapper.querySelectorAll('.card'));
+            if (!cards.length) return;
+
+            const setTracks = (colIndex, rowIndex) => {
+              if (!isDesktop) return istResetTracks();
+              const big = '1.62fr';
+              const small = '0.38fr';
+              const bigH = '672px';
+              const smallH = '288px';
+              istWrapper.style.setProperty('--c1i', colIndex === 0 ? big : small);
+              istWrapper.style.setProperty('--c2i', colIndex === 1 ? big : small);
+              istWrapper.style.setProperty('--r1i', rowIndex === 0 ? bigH : smallH);
+              istWrapper.style.setProperty('--r2i', rowIndex === 1 ? bigH : smallH);
+            };
+
+            const istResetTracks = () => {
+              istWrapper.style.removeProperty('--c1i');
+              istWrapper.style.removeProperty('--c2i');
+              istWrapper.style.removeProperty('--r1i');
+              istWrapper.style.removeProperty('--r2i');
+            };
+
+            const reattach = () => {
+              const list = Array.from(istWrapper.querySelectorAll('.card'));
+              list.forEach((node, i) => {
+                const col = i % 2;
+                const row = Math.floor(i / 2);
+                node.addEventListener('mouseenter', () => setTracks(col, row));
+              });
+              istWrapper.addEventListener('mouseleave', istResetTracks);
+            };
+
+            istResetTracks();
+            reattach();
+            istResizeInit.reset = istResetTracks;
+          };
+
+          let istResizeReady = false;
+          const ensureIstResizeInit = () => {
+            if (istResizeReady) return;
+            istResizeInit();
+            istResizeReady = true;
+          };
+
+          istToggle.addEventListener('click', () => {
+            if (istWrapper.style.display === 'grid') {
+              ensureIstResizeInit();
+            }
+          });
+          if (istWrapper.style.display !== 'none') ensureIstResizeInit();
+
+          window.addEventListener('resize', () => {
+            const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+            if (!isDesktop && typeof istResizeInit.reset === 'function') {
+              istResizeInit.reset();
+            }
+          });
+        }
+
+        // Cappadocia slider
+        const slider = document.getElementById('cap-slider');
+        if (slider) {
+          const slides = Array.from(slider.querySelectorAll('img'));
+          let idx = 0;
+          setInterval(() => {
+            slides[idx].classList.remove('active');
+            idx = (idx + 1) % slides.length;
+            slides[idx].classList.add('active');
+          }, 3500);
+        }
+
+        // Other destinations horizontal slider: touchpad/trackpad only; no nav buttons
+        const viewport = document.getElementById('hz-viewport');
+        if (viewport) {
+          // Ensure native scroll works; no button bindings
+          // Keep a resize listener if needed in future
+          const onResize = () => {};
+          window.addEventListener('resize', onResize);
+        }
+
+        // Other destinations: details toggle inside the card
+        const details = document.getElementById('dest-details');
+        if (details) {
+          const cityBlocks = Array.from(details.querySelectorAll('.city-content'));
+          const buttons = Array.from(document.querySelectorAll('#other-destinations .hz-card .btn[data-city]'));
+          const showLabels = {
+            istanbul: 'Подробнее',
+            antalya: 'Подробнее',
+            izmir: 'Подробнее',
+            bodrum: 'Подробнее',
+            pamukkale: 'Подробнее',
+            ephesus: 'Подробнее'
+          };
+          const hideLabels = {
+            istanbul: 'Скрыть',
+            antalya: 'Скрыть',
+            izmir: 'Скрыть',
+            bodrum: 'Скрыть',
+            pamukkale: 'Скрыть',
+            ephesus: 'Скрыть'
+          };
+          let openCity = null;
+
+          const setButtonLabels = () => {
+            buttons.forEach((btn) => {
+              const city = btn.getAttribute('data-city');
+              btn.textContent = openCity === city ? hideLabels[city] : showLabels[city];
+            });
+          };
+
+          const showOnlyCityBlock = (city) => {
+            cityBlocks.forEach((block) => {
+              const isTarget = block.getAttribute('data-city') === city;
+              block.style.display = isTarget ? 'grid' : 'none';
+            });
+          };
+
+          const expandDetails = (city) => {
+            showOnlyCityBlock(city);
+            details.style.display = 'block';
+            const target = details.scrollHeight;
+            details.style.height = '0px';
+            details.style.opacity = '0';
+            requestAnimationFrame(() => {
+              details.style.height = target + 'px';
+              details.style.opacity = '1';
+            });
+            const onEnd = (ev) => {
+              if (ev.propertyName === 'height') {
+                details.style.height = '';
+                details.removeEventListener('transitionend', onEnd);
+              }
+            };
+            details.addEventListener('transitionend', onEnd);
+          };
+
+          const collapseDetails = () => {
+            const start = details.scrollHeight;
+            details.style.height = start + 'px';
+            requestAnimationFrame(() => {
+              details.style.height = '0px';
+              details.style.opacity = '0';
+            });
+            const onEnd = () => {
+              details.style.display = 'none';
+              details.removeEventListener('transitionend', onEnd);
+            };
+            details.addEventListener('transitionend', onEnd);
+          };
+
+          const resizeDetailsToCity = (city) => {
+            const start = details.scrollHeight;
+            details.style.height = start + 'px';
+            showOnlyCityBlock(city);
+            requestAnimationFrame(() => {
+              const target = details.scrollHeight;
+              details.style.height = target + 'px';
+            });
+            const onEnd = (ev) => {
+              if (ev.propertyName === 'height') {
+                details.style.height = '';
+                details.removeEventListener('transitionend', onEnd);
+              }
+            };
+            details.addEventListener('transitionend', onEnd);
+          };
+
+          buttons.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              const city = btn.getAttribute('data-city');
+              const isOpen = details.style.display !== 'none';
+              if (!isOpen) {
+                openCity = city;
+                expandDetails(city);
+              } else if (openCity === city) {
+                collapseDetails();
+                openCity = null;
+              } else {
+                openCity = city;
+                resizeDetailsToCity(city);
+              }
+              setButtonLabels();
+            });
+          });
+
+          // init labels
+          setButtonLabels();
+        }
+      })();
+    </script>
+  </body>
+</html>
