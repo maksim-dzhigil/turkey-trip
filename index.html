@@ -136,14 +136,253 @@
       .hz-nav[disabled] { opacity: 0.4; cursor: default; }
       .hz-prev { left: -10px; }
       .hz-next { right: -10px; }
+      /* Sticky subnav */
+      .subnav { position: sticky; top: 0; z-index: 40; background: rgba(11,18,32,0.75); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .subnav .inner { display:flex; gap:8px; flex-wrap:wrap; padding: 10px 0; }
+      .subnav a { color: #e2e8f0; text-decoration: none; padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); }
+      .subnav a[aria-current="page"] { background: rgba(12,115,254,0.2); color: #fff; border-color: rgba(12,115,254,0.45); }
+
+      /* Roadmap timeline */
+      .seg-tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 6px 0 12px; }
+      .seg-tabs .tab { background: #eef2ff; color: #1e293b; border: 0; border-radius: 10px; padding: 8px 12px; font-weight: 700; cursor: pointer; }
+      .seg-tabs .tab.active { background: var(--brand); color: #fff; }
+      .timeline { position: relative; padding-left: 22px; }
+      .timeline::before { content: ""; position: absolute; left: 9px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; }
+      .timeline li { list-style: none; position: relative; margin: 0 0 10px; padding: 0 0 0 6px; }
+      .timeline li .dot { position: absolute; left: -2px; top: 4px; width: 12px; height: 12px; border-radius: 999px; background: #e2e8f0; border: 2px solid #ffffff; box-shadow: 0 0 0 2px #e2e8f0; }
+      .timeline li .row { margin-left: 12px; }
+
+      /* Pricing TL;DR */
+      .pricing-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+      @media (min-width: 900px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
+      .pricing-card { background: var(--card); color: var(--text); border-radius: 16px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
+      .pricing-card .header { display:flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+      .pricing-card .title { font-weight: 800; font-size: 18px; }
+      .pricing-card .badge { display:inline-block; background: rgba(12,115,254,0.12); color: var(--brand); border: 1px solid rgba(12,115,254,0.4); border-radius: 999px; padding: 4px 8px; font-weight: 800; font-size: 12px; }
+      .pricing-card .price { font-weight: 800; color: var(--brand); }
+      .pricing-card .subtitle { color: var(--muted); margin-bottom: 10px; }
+      .pricing-card .features { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+      .feat { display: flex; align-items: center; gap: 8px; }
+      .icon-ok, .icon-no { width: 18px; height: 18px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; }
+      .icon-ok { background: #16a34a; color: #fff; }
+      .icon-no { background: #ef4444; color: #fff; }
+      .pricing-card .cta { margin-top: 12px; display:flex; gap:8px; flex-wrap:wrap; }
     </style>
   </head>
   <body>
     <div class="wrap">
+      <nav class="subnav" aria-label="Навигация по странице">
+        <div class="inner">
+          <a href="#tldr" class="subnav-link" aria-current="page">TL;DR</a>
+          <a href="#plan" class="subnav-link">Маршрут</a>
+          <a href="#budgets" class="subnav-link">Бюджет</a>
+          <a href="#stays" class="subnav-link">Жильё</a>
+          <a href="#logistics" class="subnav-link">Логистика</a>
+          <a href="#romance" class="subnav-link">Романтика</a>
+          <a href="#risks" class="subnav-link">Риски</a>
+          <a href="#other-destinations" class="subnav-link">Другие места</a>
+        </div>
+      </nav>
       <header>
         <h1>Путешествие по Турции</h1>
       </header>
+      <section id="tldr" class="card" style="margin-top: 8px; margin-bottom: 16px;">
+        <h2 style="margin: 0 0 6px;">TL;DR — тарифы/варианты (вторая половина сентября)</h2>
+        <p class="muted" style="margin: 0 0 12px;">Сравнение включённых пунктов. Выбирайте подходящий уровень.</p>
+        <div class="pricing-grid">
+          <article class="pricing-card" aria-label="Базовый тариф — Стамбул 7 ночей">
+            <div class="header">
+              <div class="title">Базовый</div>
+              <span class="badge">7 ночей</span>
+            </div>
+            <div class="price">$1 900–2 500 за двоих ($950–1 250/чел)</div>
+            <p class="subtitle">Стамбул 7 ночей: два отдельных номера, прогулки, Босфор, хаммам.</p>
+            <ul class="features">
+              <li class="feat"><span class="icon-ok">✓</span><span>Два отдельных номера в Стамбуле</span></li>
+              <li class="feat"><span class="icon-ok">✓</span><span>Круиз по Босфору</span></li>
+              <li class="feat"><span class="icon-ok">✓</span><span>Хаммам для двоих</span></li>
+              <li class="feat"><span class="icon-no">✕</span><span>Полёт на шаре в Каппадокии</span></li>
+              <li class="feat"><span class="icon-no">✕</span><span>Внутренние перелёты IST↔ASR/NAV</span></li>
+              <li class="feat"><span class="icon-no">✕</span><span>2‑дневный тур «всё включено»</span></li>
+            </ul>
+            <div class="cta">
+              <a class="btn" href="#budgets">Детали бюджета</a>
+              <a class="btn" href="#plan">Маршрут</a>
+            </div>
+          </article>
+          <article class="pricing-card" aria-label="Оптимум — Стамбул + Каппадокия 8–9 ночей">
+            <div class="header">
+              <div class="title">Оптимум</div>
+              <span class="badge">8–9 ночей</span>
+            </div>
+            <div class="price">$2 400–3 400 за двоих ($1 200–1 700/чел)</div>
+            <p class="subtitle">4 ночи Стамбул → 3 ночи Гёреме → 1–2 ночи Стамбул. 2BR или 2 номера.</p>
+            <ul class="features">
+              <li class="feat"><span class="icon-ok">✓</span><span>Два отдельных номера / 2BR апартаменты</span></li>
+              <li class="feat"><span class="icon-ok">✓</span><span>Внутренние перелёты IST↔ASR/NAV</span></li>
+              <li class="feat"><span class="icon-ok">✓</span><span>Каппадокия: рассвет, долины</span></li>
+              <li class="feat"><span class="icon-ok">✓</span><span>Полёт на шаре (по погоде)</span></li>
+              <li class="feat"><span class="icon-no">✕</span><span>2‑дневный тур «всё включено»</span></li>
+            </ul>
+            <div class="cta">
+              <a class="btn" href="#budgets">Детали бюджета</a>
+              <a class="btn" href="#plan">Маршрут</a>
+            </div>
+          </article>
+          <article class="pricing-card" aria-label="Премиум — + тур всё включено в Каппадокию">
+            <div class="header">
+              <div class="title">Премиум</div>
+              <span class="badge">9–10 ночей</span>
+            </div>
+            <div class="price">$2 600–3 400 за двоих</div>
+            <p class="subtitle">Тот же каркас, но Каппадокия через 2‑дневный тур от дверей отеля.</p>
+            <ul class="features">
+              <li class="feat"><span class="icon-ok">✓</span><span>Все пункты «Оптимум»</span></li>
+              <li class="feat"><span class="icon-ok">✓</span><span>2‑дневный тур «всё включено» (трансферы, билеты, пещерный отель, питание)</span></li>
+              <li class="feat"><span class="icon-ok">✓</span><span>Возможность раздельных номеров в туре</span></li>
+            </ul>
+            <div class="cta">
+              <a class="btn" href="#budgets">Детали бюджета</a>
+              <a class="btn" href="#plan">Маршрут</a>
+            </div>
+          </article>
+        </div>
+      </section>
 
+      <section id="plan" class="card" style="margin-bottom: 24px;">
+        <div style="display:flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <h2 style="margin:0 0 8px;">Маршрут (roadmap)</h2>
+          <div class="seg-tabs" role="tablist" aria-label="Варианты маршрута">
+            <button class="tab active" role="tab" aria-selected="true" data-variant="A">Базовый</button>
+            <button class="tab" role="tab" aria-selected="false" data-variant="B">Оптимум</button>
+            <button class="tab" role="tab" aria-selected="false" data-variant="C">Премиум</button>
+          </div>
+        </div>
+        <div id="roadmap" class="roadmap" aria-live="polite">
+          <div class="roadmap-variant" data-variant="A" style="display:block;">
+            <ol class="timeline">
+              <li><span class="dot"></span><div class="row"><strong>День 1</strong> — прилёт IST/SAW, заселение Бейоглу, прогулка и ужин на террасе.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>День 2</strong> — исторический полуостров, хаммам для двоих.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>День 3</strong> — азиатская сторона (Kadıköy/Üsküdar), закатный круиз.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>Дни 4–6</strong> — музеи, рынки, прогулки, террасы.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>Дни 7</strong> — свободный день, вылет домой.</div></li>
+            </ol>
+          </div>
+          <div class="roadmap-variant" data-variant="B" style="display:none;">
+            <ol class="timeline">
+              <li><span class="dot"></span><div class="row"><strong>Дни 1–4</strong> — Стамбул: исторический полуостров, азиатская сторона, закатный круиз.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>День 4 (вечер)</strong> — перелёт в Kayseri/Nevşehir, трансфер в Гёреме.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>Дни 5–7</strong> — Каппадокия: рассвет/шары, долины, пещерный отель; один день — запас по погоде.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>День 8</strong> — перелёт в Стамбул, вечер в Каракёе.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>День 9</strong> — опциональный день в Стамбуле или вылет домой.</div></li>
+            </ol>
+          </div>
+          <div class="roadmap-variant" data-variant="C" style="display:none;">
+            <ol class="timeline">
+              <li><span class="dot"></span><div class="row"><strong>Дни 1–4</strong> — Стамбул, подборка must‑do и романтичные активности.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>Дни 5–6</strong> — 2‑дневный тур «всё включено» в Каппадокию (из отеля), размещение в разных номерах по запросу.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>Дни 7–8</strong> — возврат в Стамбул, свободный день/шопинг.</div></li>
+              <li><span class="dot"></span><div class="row"><strong>День 9–10</strong> — запас/вылет.</div></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="budgets" class="card" style="margin-bottom: 24px;">
+        <h2 style="margin:0 0 8px;">Бюджетные таблицы (диапазоны)</h2>
+        <p class="muted" style="margin: 0 0 12px;">Актуально на: август 2025. Уточняются после фиксации дат и времени прилётов.</p>
+        <div class="listing-grid">
+          <article class="listing-card">
+            <h3 style="margin:0 0 8px;">Базовый — Стамбул 7 ночей</h3>
+            <div class="widget-box" style="padding: 0; background: transparent;">
+              <table style="width:100%; border-collapse: collapse;">
+                <thead><tr><th style="text-align:left;">Статья</th><th style="text-align:left;">На человека</th><th style="text-align:left;">Итого</th></tr></thead>
+                <tbody>
+                  <tr><td>Международные перелёты</td><td>$450–600</td><td>$900–1 200</td></tr>
+                  <tr><td>Жильё: 2 отдельных номера</td><td>$350–490</td><td>$700–980</td></tr>
+                  <tr><td>Активности/трансферы/питание</td><td>$150–225</td><td>$300–450</td></tr>
+                  <tr><td><strong>ИТОГО</strong></td><td><strong>$950–1 250</strong></td><td><strong>$1 900–2 500</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+          <article class="listing-card">
+            <h3 style="margin:0 0 8px;">Оптимум — Стамбул + Каппадокия 8–9 ночей</h3>
+            <div class="widget-box" style="padding: 0; background: transparent;">
+              <table style="width:100%; border-collapse: collapse;">
+                <thead><tr><th style="text-align:left;">Статья</th><th style="text-align:left;">На человека</th><th style="text-align:left;">Итого</th></tr></thead>
+                <tbody>
+                  <tr><td>Международные перелёты</td><td>$450–600</td><td>$900–1 200</td></tr>
+                  <tr><td>Внутренние перелёты IST↔ASR/NAV</td><td>$110–160</td><td>$220–320</td></tr>
+                  <tr><td>Жильё: Стамбул (70–100) + Гёреме (80–120)</td><td>$335–540</td><td>$670–1 080</td></tr>
+                  <tr><td>Полёт на шаре (по погоде)</td><td>$150–250</td><td>$300–500</td></tr>
+                  <tr><td>Активности/трансферы/питание</td><td>$150–225</td><td>$300–450</td></tr>
+                  <tr><td><strong>ИТОГО</strong></td><td><strong>$1 200–1 700</strong></td><td><strong>$2 400–3 400</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+          <article class="listing-card">
+            <h3 style="margin:0 0 8px;">Премиум — тур в Каппадокию</h3>
+            <div class="widget-box" style="padding: 0; background: transparent;">
+              <table style="width:100%; border-collapse: collapse;">
+                <thead><tr><th style="text-align:left;">Статья</th><th style="text-align:left;">На человека</th><th style="text-align:left;">Итого</th></tr></thead>
+                <tbody>
+                  <tr><td>Международные перелёты</td><td>$450–600</td><td>$900–1 200</td></tr>
+                  <tr><td>2‑дневный тур «всё включено» Каппадокия</td><td>$580</td><td>$1 160</td></tr>
+                  <tr><td>Жильё в Стамбуле (оставшиеся ночи)</td><td>$150–275</td><td>$300–550</td></tr>
+                  <tr><td>Активности/трансферы/питание</td><td>$150–225</td><td>$300–450</td></tr>
+                  <tr><td><strong>ИТОГО</strong></td><td><strong>$1 330–1 680</strong></td><td><strong>$2 600–3 400</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="card" id="logistics" style="margin-bottom: 24px;">
+        <h2 style="margin:0 0 8px;">Логистика: как встретиться и добраться</h2>
+        <ul class="list" style="margin-top: 0;">
+          <li><strong>Точка встречи</strong>: аэропорт IST (предпочтительно) или SAW. Выберите рейсы с прилётом в интервале 10:00–16:00 IST.</li>
+          <li><strong>Сценарий встречи</strong>: первый прилетевший ожидает у стойки IstanbulKart; общий запас между рейсами — 2–3 часа.</li>
+          <li><strong>Трансфер в город</strong>: такси ($40–55 до Бейоглу), метро M11 + M2 (~1:10), автобус Havaist.</li>
+          <li><strong>Каппадокия</strong>:
+            <ul class="list">
+              <li>Самолёт: IST/SAW → ASR (Kayseri) или NAV (Nevşehir), 1:20; далее трансфер 60–75 мин до Гёреме.</li>
+              <li>Альтернатива: ночной автобус из Стамбула, 9–10 ч, удобно если билеты дорогие.</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <section class="card" id="rooms" style="margin-bottom: 24px;">
+        <h2 style="margin:0 0 8px;">Жильё: раздельные комнаты</h2>
+        <ul class="list" style="margin-top: 0;">
+          <li><strong>2BR апартаменты (Бейоглу/Каракёй)</strong>: $70–120/ночь (всего), 3–5 минут до метро.</li>
+          <li><strong>Два отдельных номера</strong> в одном небольшом отеле ($80–100/ночь за номер).</li>
+          <li>Под каппадокийский блок: <strong>пещерные отели</strong> в Гёреме, $80–120/ночь за номер.</li>
+        </ul>
+      </section>
+
+      <section class="card" id="romance" style="margin-bottom: 24px;">
+        <h2 style="margin:0 0 8px;">Романтические активности</h2>
+        <ul class="list" style="margin-top: 0;">
+          <li>Закатный круиз по Босфору (2–3 ч): $25–40/чел.</li>
+          <li>Хаммам для двоих (частные комнаты): $100–180 за двоих.</li>
+          <li>Ресторан‑терраса в Галате/Каракёе: $50–100 за двоих.</li>
+          <li>Принцевы острова: паром + велосипеды, $20–35 за двоих.</li>
+          <li>Каппадокия: полёт на шаре $150–250/чел; видовые точки и фотосессия на рассвете.</li>
+        </ul>
+      </section>
+
+      <section class="card" id="risks" style="margin-bottom: 24px;">
+        <h2 style="margin:0 0 8px;">Риски и план‑Б</h2>
+        <ul class="list" style="margin-top: 0;">
+          <li><strong>Шары зависят от погоды</strong>: бронируем на первое утро в Гёреме; если отмена — перенос на следующее.</li>
+          <li><strong>Перелёты</strong>: закладывайте 3+ часа стыковки на встречу; гибкие тарифы приветствуются.</li>
+          <li><strong>Районы проживания</strong>: избегайте слишком туристичных улиц ночью (шум), берите 2–3 линию от магистралей.</li>
+        </ul>
+      </section>
       <div style="margin: 8px 0 24px; display:flex; gap:8px; flex-wrap:wrap;">
         <a id="toggle-widgets" href="#" class="btn">Авиабилеты</a>
         <a id="toggle-hotels" href="#" class="btn">Отели прицениться</a>
@@ -153,30 +392,24 @@
         <section class="card">
           <h2>Перелёты в Стамбул · рил тайм от авиасейлс</h2>
           <div class="widget-box">
-            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=MOW&destination=IST&date=2025-09-16" charset="utf-8"></script>
+            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=MOW&destination=IST" charset="utf-8"></script>
           </div>
           <div class="offers" aria-label="Конкретные предложения перелётов в Стамбул">
             <div class="offer">
               <div>
                 <strong>Москва → Стамбул</strong>
-                <div class="meta">16.09 · прямой · прилёт 15:05 IST</div>
+                <div class="meta">вторая половина сентября · прямой</div>
               </div>
-              <div class="price">$225</div>
-              <div class="actions">
-                <a class="btn" href="https://www.aviasales.ru/booking?partner=aviasales-ota&order_id=bf55a227-1063-4482-b7b3-77b30edd8bd1" target="_blank" rel="noopener">Купить</a>
-                <a class="btn" href="https://www.aviasales.ru/search/MOW1609IST1" target="_blank" rel="noopener">Все рейсы на это число</a>
-              </div>
+              <div class="price">ориентир: $450–600/чел</div>
+              <div class="actions"><a class="btn" href="https://www.aviasales.com/" target="_blank" rel="noopener">Открыть поиск</a></div>
             </div>
             <div class="offer">
               <div>
                 <strong>Ташкент → Стамбул</strong>
-                <div class="meta">16.09 · прямой · прилёт 11:00 IST (раньше девушки)</div>
+                <div class="meta">вторая половина сентября · прямой</div>
               </div>
-              <div class="price">$225</div>
-              <div class="actions">
-                <a class="btn" href="https://booking.uzairways.com/ru/booking/personal/66ec11201b49c/681029d95dc4f.html?aci=100&marker=nza335tu0ggw&payload=MzJjMDY0ODE4NTY1ZDFmMjg2MjZjYTI4ODliMTM4MDA6MTg3OTcuMDAwMDAwOlJVQg==" target="_blank" rel="noopener">Купить</a>
-                <a class="btn" href="https://www.aviasales.ru/search/TAS1609IST1" target="_blank" rel="noopener">Все рейсы на это число</a>
-              </div>
+              <div class="price">ориентир: $450–600/чел</div>
+              <div class="actions"><a class="btn" href="https://www.aviasales.com/" target="_blank" rel="noopener">Открыть поиск</a></div>
             </div>
           </div>
         </section>
@@ -205,8 +438,8 @@
             </div>
           </div>
           <div class="map-links">
-            <a class="btn" href="https://www.airbnb.com/s/Istanbul--T%C3%BCrkiye/homes?refinement_paths%5B%5D=%2Fhomes&place_id=ChIJexVgWlG2yhQR6B1akfSarCI&date_picker_type=calendar&checkin=2025-09-16&checkout=2025-09-19&adults=2&source=structured_search_input_header&search_type=user_map_move&query=Istanbul%2C%20T%C3%BCrkiye&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2025-09-01&monthly_length=3&monthly_end_date=2025-12-01&search_mode=regular_search&price_filter_input_type=2&price_filter_num_nights=3&channel=EXPLORE&min_bedrooms=2&selected_filter_order%5B%5D=min_bedrooms%3A2&selected_filter_order%5B%5D=min_beds%3A2&selected_filter_order%5B%5D=min_bathrooms%3A1&selected_filter_order%5B%5D=amenities%3A4&selected_filter_order%5B%5D=amenities%3A5&selected_filter_order%5B%5D=amenities%3A45&selected_filter_order%5B%5D=price_max%3A268&update_selected_filters=true&min_beds=2&min_bathrooms=1&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&ne_lat=41.04831779771419&ne_lng=28.994398927536707&sw_lat=41.01715039758059&sw_lng=28.9580644815793&zoom=14.807748524241768&zoom_level=14.807748524241768&search_by_map=true&price_max=268" target="_blank" rel="noopener">Карта Airbnb</a>
-            <a class="btn" href="https://www.booking.com/searchresults.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ss=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&ssne=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&ssne_untouched=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&efdco=1&lang=ru&src=city&dest_id=-739274&dest_type=city&checkin=2025-09-16&checkout=2025-09-19&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bentire_place_bedroom_count%3D2%3Bdi%3D4310" target="_blank" rel="noopener">Карта Booking</a>
+            <a class="btn" href="https://www.airbnb.com/s/Istanbul--T%C3%BCrkiye/homes?refinement_paths%5B%5D=%2Fhomes&place_id=ChIJexVgWlG2yhQR6B1akfSarCI&adults=2&search_mode=regular_search&min_bedrooms=2&selected_filter_order%5B%5D=min_bedrooms%3A2&selected_filter_order%5B%5D=min_beds%3A2&selected_filter_order%5B%5D=min_bathrooms%3A1&selected_filter_order%5B%5D=amenities%3A4&selected_filter_order%5B%5D=amenities%3A5&selected_filter_order%5B%5D=amenities%3A45&min_beds=2&min_bathrooms=1&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&ne_lat=41.04831779771419&ne_lng=28.994398927536707&sw_lat=41.01715039758059&sw_lng=28.9580644815793&zoom=14.8&search_by_map=true" target="_blank" rel="noopener">Карта Airbnb</a>
+            <a class="btn" href="https://www.booking.com/searchresults.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ss=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&ssne=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&ssne_untouched=%D0%91%D0%B5%D0%B9%D0%BE%D0%B3%D0%BB%D1%83&efdco=1&lang=ru&src=city&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure&nflt=oos%3D1%3Bentire_place_bedroom_count%3D2%3Bdi%3D4310" target="_blank" rel="noopener">Карта Booking</a>
           </div>
         </div>
         <div class="listing-grid" id="airbnb-list" role="tabpanel" aria-labelledby="airbnb" style="display: grid;">
@@ -219,7 +452,7 @@
               <div class="price">$76 / ночь · от 3 ночей</div>
             </div>
             <div class="row">
-              <a class="btn" href="https://www.airbnb.com/rooms/1153718763091125099?adults=2&check_in=2025-09-16&check_out=2025-09-19&search_mode=regular_search&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&source_impression_id=p3_1755840770_P3Ud3qLX3Up3CVmo&previous_page_section_name=1000&federated_search_id=SKELETON" target="_blank" rel="noopener">Забронировать</a>
+              <a class="btn" href="https://www.airbnb.com/rooms/1153718763091125099?adults=2&search_mode=regular_search&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45" target="_blank" rel="noopener">Открыть объявление</a>
             </div>
           </article>
           <article class="listing-card">
@@ -231,7 +464,7 @@
               <div class="price">$75-80 / ночь</div>
             </div>
             <div class="row">
-              <a class="btn" href="https://www.airbnb.com/rooms/1072224332101678418?adults=2&check_in=2025-09-16&check_out=2025-09-19&search_mode=regular_search&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&source_impression_id=p3_1755840770_P3Xan6M3rHN-tJoS&previous_page_section_name=1000&federated_search_id=SKELETON" target="_blank" rel="noopener">Забронировать</a>
+              <a class="btn" href="https://www.airbnb.com/rooms/1072224332101678418?adults=2&search_mode=regular_search&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45" target="_blank" rel="noopener">Открыть объявление</a>
             </div>
           </article>
         </div>
@@ -245,7 +478,7 @@
               <div class="price">$80 / ночь · от 2 ночей</div>
             </div>
             <div class="row">
-              <a class="btn" href="https://www.booking.com/hotel/tr/ottoman-concept-taksim.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ucfs=1&checkin=2025-09-16&checkout=2025-09-19&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bmealplan%3D1%3Bdi%3D4310%3Bentire_place_bedroom_count%3D2&srpvid=9a3a281b147b0015&srepoch=1755841727&matching_block_id=1447894902_417605791_2_1_0&atlas_src=sr_iw_title" target="_blank" rel="noopener">Забронировать</a>
+              <a class="btn" href="https://www.booking.com/hotel/tr/ottoman-concept-taksim.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ucfs=1&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bmealplan%3D1%3Bdi%3D4310%3Bentire_place_bedroom_count%3D2" target="_blank" rel="noopener">Открыть отель</a>
             </div>
           </article>
           <article class="listing-card">
@@ -257,7 +490,7 @@
               <div class="price">$65–75 / ночь</div>
             </div>
             <div class="row">
-              <a class="btn" href="https://www.booking.com/hotel/tr/apartment-patika-suites.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ucfs=1&checkin=2025-09-16&checkout=2025-09-19&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bentire_place_bedroom_count%3D2%3Bdi%3D4310&srpvid=9a3a281b147b0015&srepoch=1755841785&matching_block_id=117200504_88799095_2_0_0&atlas_src=sr_iw_title" target="_blank" rel="noopener">Забронировать</a>
+              <a class="btn" href="https://www.booking.com/hotel/tr/apartment-patika-suites.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ucfs=1&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&nflt=oos%3D1%3Bentire_place_bedroom_count%3D2%3Bdi%3D4310" target="_blank" rel="noopener">Открыть отель</a>
             </div>
           </article>
         </div>
@@ -266,7 +499,6 @@
       <section class="card cap-hero" style="margin-bottom: 24px;">
         <div class="hero-head">
           <h2>Каппадокия — мастхев</h2>
-          <span class="badge">Главное место поездки</span>
         </div>
         <div class="cap-slider" id="cap-slider">
           <img src="imgs/cappadocia/gettyimages-1474856123-640x640.jpg" alt="Cappadocia balloons 1" class="active"/>
@@ -439,6 +671,39 @@
     </div>
     <script>
       (function () {
+        // Sticky subnav active link highlight
+        const subnavLinks = Array.from(document.querySelectorAll('.subnav-link'));
+        const sectionIds = subnavLinks.map(a => a.getAttribute('href')).filter(Boolean).map(h => h.slice(1));
+        const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+        const setActive = (id) => {
+          subnavLinks.forEach(a => {
+            if (a.getAttribute('href') === '#' + id) {
+              a.setAttribute('aria-current', 'page');
+            } else {
+              a.removeAttribute('aria-current');
+            }
+          });
+        };
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) setActive(entry.target.id);
+          });
+        }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
+        sections.forEach(s => obs.observe(s));
+
+        // Roadmap variant tabs
+        const segTabs = Array.from(document.querySelectorAll('#plan .seg-tabs .tab'));
+        const variants = Array.from(document.querySelectorAll('#plan .roadmap-variant'));
+        const showVariant = (key) => {
+          variants.forEach(v => { v.style.display = v.getAttribute('data-variant') === key ? 'block' : 'none'; });
+          segTabs.forEach(t => {
+            const isActive = t.getAttribute('data-variant') === key;
+            t.classList.toggle('active', isActive);
+            t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          });
+        };
+        segTabs.forEach(t => t.addEventListener('click', () => showVariant(t.getAttribute('data-variant'))));
+
         // Tabs for stays
         const tabButtons = document.querySelectorAll('#stays .tab');
         const airbnbList = document.getElementById('airbnb-list');
