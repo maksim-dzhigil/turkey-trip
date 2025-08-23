@@ -57,17 +57,13 @@
       }
                @media (min-width: 900px) {
            #top-widgets { 
-             /* управляемые переменными размеры треков сетки */
-             grid-template-columns: var(--c1, 1fr) var(--c2, 1fr);
-             grid-template-rows: var(--r1, 322px) var(--r2, 322px);
+             grid-template-columns: 1fr;
            }
          }
          #top-widgets .card {
-           height: 322px; /* мобильная/узкая ширина — фиксированная высота */
-        display: flex; 
-        flex-direction: column; 
-      }
-      @media (min-width: 900px) { #top-widgets .card { height: auto; } }
+           display: flex; 
+           flex-direction: column; 
+         }
       #top-widgets .card h2 { margin-bottom: 12px; }
       #top-widgets .widget-box { 
         flex: 1; 
@@ -75,6 +71,12 @@
         border-radius: 12px; 
       }
       #top-widgets .ticket-links { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+      /* Offers list inside flights card */
+      #top-widgets .offers { display: grid; gap: 8px; margin-top: 10px; }
+      #top-widgets .offer { display: flex; align-items: center; gap: 12px; background: #eef2ff; color: #1e293b; border-radius: 10px; padding: 10px; }
+      #top-widgets .offer .meta { color: var(--muted); font-size: 14px; }
+      #top-widgets .offer .price { margin-left: auto; font-weight: 800; color: var(--brand); }
+      #top-widgets .offer .actions { display: flex; gap: 8px; }
       
       /* Other-destinations details panel */
       #dest-details { 
@@ -149,35 +151,33 @@
 
       <section id="top-widgets" style="margin-top: 12px; margin-bottom: 24px; display: none; height: 0; opacity: 0;">
         <section class="card">
-          <h2>Москва → Стамбул · 16.09</h2>
+          <h2>Перелёты в Стамбул · рил тайм от авиасейлс</h2>
           <div class="widget-box">
             <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=MOW&destination=IST&date=2025-09-16" charset="utf-8"></script>
           </div>
-          <div class="ticket-links">
-            <a class="btn" href="https://www.aviasales.ru/booking?partner=aviasales-ota&order_id=bf55a227-1063-4482-b7b3-77b30edd8bd1" target="_blank" rel="noopener">Прилететь в 15:05 IST из мск — $225</a>
-            <a class="btn" href="https://www.aviasales.ru/search/MOW1609IST1" target="_blank" rel="noopener">Все рейсы 16.09 · Москва → Стамбул</a>
-          </div>
-        </section>
-        <section class="card">
-          <h2>Ташкент → Стамбул · 16.09</h2>
-          <div class="widget-box">
-            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=TAS&destination=IST&date=2025-09-16" charset="utf-8"></script>
-          </div>
-          <div class="ticket-links">
-            <a class="btn" href="https://booking.uzairways.com/ru/booking/personal/66ec11201b49c/681029d95dc4f.html?aci=100&marker=nza335tu0ggw&payload=MzJjMDY0ODE4NTY1ZDFmMjg2MjZjYTI4ODliMTM4MDA6MTg3OTcuMDAwMDAwOlJVQg==" target="_blank" rel="noopener">Прилететь в 11:00 IST из Ташкента — $225</a>
-            <a class="btn" href="https://www.aviasales.ru/search/TAS1609IST1" target="_blank" rel="noopener">Все рейсы 16.09 · Ташкент → Стамбул</a>
-          </div>
-        </section>
-        <section class="card">
-          <h2>Стамбул → Москва · 26.09</h2>
-          <div class="widget-box">
-            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=IST&destination=MOW&date=2025-09-26" charset="utf-8"></script>
-          </div>
-        </section>
-        <section class="card">
-          <h2>Стамбул → Ташкент · 26.09</h2>
-          <div class="widget-box">
-            <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&searchUrl=www.aviasales.com%2Fsearch&locale=ru&powered_by=true&one_way=true&only_direct=false&period=year&range=7%2C14&primary=%230C73FE&color_background=%23ffffff&dark=%23000000&light=%23FFFFFF&achieve=%2345AD35&promo_id=4041&campaign_id=100&origin=IST&destination=TAS&date=2025-09-26" charset="utf-8"></script>
+          <div class="offers" aria-label="Конкретные предложения перелётов в Стамбул">
+            <div class="offer">
+              <div>
+                <strong>Москва → Стамбул</strong>
+                <div class="meta">16.09 · прямой · прилёт 15:05 IST</div>
+              </div>
+              <div class="price">$225</div>
+              <div class="actions">
+                <a class="btn" href="https://www.aviasales.ru/booking?partner=aviasales-ota&order_id=bf55a227-1063-4482-b7b3-77b30edd8bd1" target="_blank" rel="noopener">Купить</a>
+                <a class="btn" href="https://www.aviasales.ru/search/MOW1609IST1" target="_blank" rel="noopener">Все рейсы на это число</a>
+              </div>
+            </div>
+            <div class="offer">
+              <div>
+                <strong>Ташкент → Стамбул</strong>
+                <div class="meta">16.09 · прямой · прилёт 11:00 IST (раньше девушки)</div>
+              </div>
+              <div class="price">$225</div>
+              <div class="actions">
+                <a class="btn" href="https://booking.uzairways.com/ru/booking/personal/66ec11201b49c/681029d95dc4f.html?aci=100&marker=nza335tu0ggw&payload=MzJjMDY0ODE4NTY1ZDFmMjg2MjZjYTI4ODliMTM4MDA6MTg3OTcuMDAwMDAwOlJVQg==" target="_blank" rel="noopener">Купить</a>
+                <a class="btn" href="https://www.aviasales.ru/search/TAS1609IST1" target="_blank" rel="noopener">Все рейсы на это число</a>
+              </div>
+            </div>
           </div>
         </section>
       </section>
@@ -187,8 +187,8 @@
       
       
       <section id="hotels-widget" class="card" style="margin-bottom: 24px; display: none; height: 0; opacity: 0;">
-        <h2>Карта отелей прицениться</h2>
-        <p style="margin: 0 0 12px; color: var(--muted);">Бейоглу в Стамбуле, как Невский в Питере</p>
+        <h2>Карта отелей</h2>
+        <p style="margin: 0 0 12px; color: var(--muted);">Бейоглу в Стамбуле, как Невский в Питере · Показаны отели <span style="color: red;">без фильтрации</span> по 2 спальням</p>
         <div class="widget-box" style="height: 520px;">
           <script async src="https://tpwdg.com/content?currency=usd&trs=452250&shmarker=667488&search_host=search.hotellook.com&locale=ru&powered_by=true&draggable=true&disable_zoom=true&show_logo=true&scrollwheel=false&color=%2307AF61&contrast_color=%23ffffff&width=1000&height=500&lat=41.02861&lng=28.97472&zoom=15&radius=60&stars=0&rating_from=0&rating_to=10&promo_id=4285&campaign_id=101" charset="utf-8"></script>
         </div>
@@ -198,7 +198,7 @@
       <section id="stays" class="card" style="margin-bottom: 24px;">
         <div class="stays-head">
           <div>
-            <h2 style="margin:0 0 6px;">Квартиры в Бейоглу, 2 спальни</h2>
+            <h2 style="margin:0 0 6px;">Конкретные примеры, где жить · 2 спальни</span></h2>
             <div class="tabs" role="tablist" aria-label="Выбор площадки">
               <button class="tab active" role="tab" aria-selected="true" data-source="airbnb">Airbnb</button>
               <button class="tab" role="tab" aria-selected="false" data-source="booking">Booking</button>
@@ -211,26 +211,24 @@
         </div>
         <div class="listing-grid" id="airbnb-list" role="tabpanel" aria-labelledby="airbnb" style="display: grid;">
           <article class="listing-card">
-            <img alt="Airbnb listing 1" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.airbnb.com/rooms/1153718763091125099" />
+            <img alt="Airbnb listing 1" src="imgs/airbnb/image1.png" />
             <div class="row">
               <div>
                 <strong>Airbnb · 2 гостя · Бейоглу</strong>
-                <div class="muted">16.09–19.09</div>
               </div>
-              <div class="price">$228 / 3 ночи</div>
+              <div class="price">$76 / ночь · от 3 ночей</div>
             </div>
             <div class="row">
               <a class="btn" href="https://www.airbnb.com/rooms/1153718763091125099?adults=2&check_in=2025-09-16&check_out=2025-09-19&search_mode=regular_search&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&source_impression_id=p3_1755840770_P3Ud3qLX3Up3CVmo&previous_page_section_name=1000&federated_search_id=SKELETON" target="_blank" rel="noopener">Забронировать</a>
             </div>
           </article>
           <article class="listing-card">
-            <img alt="Airbnb listing 2" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.airbnb.com/rooms/1072224332101678418" />
+            <img alt="Airbnb listing 2" src="imgs/airbnb/image2.png" />
             <div class="row">
               <div>
                 <strong>Airbnb · 2 гостя · Бейоглу</strong>
-                <div class="muted">16.09–19.09</div>
               </div>
-              <div class="price">$227 / 3 ночи</div>
+              <div class="price">$75-80 / ночь</div>
             </div>
             <div class="row">
               <a class="btn" href="https://www.airbnb.com/rooms/1072224332101678418?adults=2&check_in=2025-09-16&check_out=2025-09-19&search_mode=regular_search&amenities%5B%5D=4&amenities%5B%5D=5&amenities%5B%5D=45&source_impression_id=p3_1755840770_P3Xan6M3rHN-tJoS&previous_page_section_name=1000&federated_search_id=SKELETON" target="_blank" rel="noopener">Забронировать</a>
@@ -243,9 +241,8 @@
             <div class="row">
               <div>
                 <strong>Ottoman Concept Taksim</strong>
-                <div class="muted">$80 / ночь · от 2 ночей</div>
               </div>
-              <div class="price">16.09–19.09</div>
+              <div class="price">$80 / ночь · от 2 ночей</div>
             </div>
             <div class="row">
               <a class="btn" href="https://www.booking.com/hotel/tr/ottoman-concept-taksim.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ucfs=1&checkin=2025-09-16&checkout=2025-09-19&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bmealplan%3D1%3Bdi%3D4310%3Bentire_place_bedroom_count%3D2&srpvid=9a3a281b147b0015&srepoch=1755841727&matching_block_id=1447894902_417605791_2_1_0&atlas_src=sr_iw_title" target="_blank" rel="noopener">Забронировать</a>
@@ -256,9 +253,8 @@
             <div class="row">
               <div>
                 <strong>Apartment Patika Suites</strong>
-                <div class="muted">$65–75 / ночь</div>
               </div>
-              <div class="price">16.09–19.09</div>
+              <div class="price">$65–75 / ночь</div>
             </div>
             <div class="row">
               <a class="btn" href="https://www.booking.com/hotel/tr/apartment-patika-suites.ru.html?label=duc511jc-10CAMo5AFCCmJleW9nbHUtdHJIIVgDaMIBiAEBmAEzuAEZyAEM2AED6AEB-AEBiAIBqAIBuAKlhqDFBsACAdICJDYyZThkNjVmLTkwOTAtNGRhOC05ZDRlLWRhYTc4ODY2OTU3Y9gCAeACAQ&aid=390156&ucfs=1&checkin=2025-09-16&checkout=2025-09-19&dest_id=-739274&dest_type=city&group_adults=2&no_rooms=1&group_children=0&nflt=oos%3D1%3Bprice%3DRUB-min-7000-1%3Bentire_place_bedroom_count%3D2%3Bdi%3D4310&srpvid=9a3a281b147b0015&srepoch=1755841785&matching_block_id=117200504_88799095_2_0_0&atlas_src=sr_iw_title" target="_blank" rel="noopener">Забронировать</a>
@@ -506,77 +502,7 @@
             toggle.textContent = collapsed ? 'Показать авиабилеты' : 'Скрыть авиабилеты';
         });
 
-        // Dynamic resize of flight widgets on hover (desktop only)
-        const resizeInit = () => {
-          const isDesktop = window.matchMedia('(min-width: 900px)').matches;
-          const cards = Array.from(wrapper.querySelectorAll('.card'));
-          if (!cards.length) return;
-
-          // helper to set grid track sizes via CSS variables
-          const setTracks = (colIndex, rowIndex) => {
-            if (!isDesktop) return resetTracks();
-            const big = '1.62fr';
-            const small = '0.38fr';
-            const bigH = '672px';
-            const smallH = '288px';
-            wrapper.style.setProperty('--c1', colIndex === 0 ? big : small);
-            wrapper.style.setProperty('--c2', colIndex === 1 ? big : small);
-            wrapper.style.setProperty('--r1', rowIndex === 0 ? bigH : smallH);
-            wrapper.style.setProperty('--r2', rowIndex === 1 ? bigH : smallH);
-          };
-
-          const resetTracks = () => {
-            wrapper.style.removeProperty('--c1');
-            wrapper.style.removeProperty('--c2');
-            wrapper.style.removeProperty('--r1');
-            wrapper.style.removeProperty('--r2');
-          };
-
-          // Clean previous listeners (if any) by cloning nodes
-          const reattach = () => {
-            const parent = wrapper;
-            const list = Array.from(parent.querySelectorAll('.card'));
-            list.forEach((node, i) => {
-              const col = i % 2; // 0 or 1
-              const row = Math.floor(i / 2); // 0 or 1 (we expect 4 cards)
-              node.addEventListener('mouseenter', () => setTracks(col, row));
-            });
-            parent.addEventListener('mouseleave', resetTracks);
-          };
-
-          resetTracks();
-          reattach();
-
-          // expose reset for other scopes
-          resizeInit.reset = resetTracks;
-        };
-
-        // initialize once widgets are first expanded (so sizes apply)
-        let resizeReady = false;
-        const ensureResizeInit = () => {
-          if (resizeReady) return;
-          resizeInit();
-          resizeReady = true;
-        };
-
-        // When opening the widgets, set up hover behavior
-        toggle.addEventListener('click', () => {
-          // If expanding, initialize after it's displayed
-          if (wrapper.style.display === 'grid') {
-            ensureResizeInit();
-          }
-        });
-
-        // Also init immediately in case the section is already open from cache
-        if (wrapper.style.display !== 'none') ensureResizeInit();
-
-        // Reset on resize under mobile breakpoint
-        window.addEventListener('resize', () => {
-          const isDesktop = window.matchMedia('(min-width: 900px)').matches;
-          if (!isDesktop && typeof resizeInit.reset === 'function') {
-            resizeInit.reset();
-          }
-        });
+        // Убран ховер‑ресайз: карточка всегда максимума
 
         // Hotels map toggle (mirrors flights)
         const hotelsWrapper = document.getElementById('hotels-widget');
@@ -586,7 +512,7 @@
           hotelsWrapper.style.display = 'none';
           hotelsWrapper.style.height = '0px';
           hotelsWrapper.style.opacity = '0';
-          hotelsToggle.textContent = 'Показать отели прицениться';
+          hotelsToggle.textContent = 'Показать карту отелей';
 
           hotelsToggle.addEventListener('click', function (e) {
             e.preventDefault();
@@ -620,7 +546,7 @@
               hotelsWrapper.addEventListener('transitionend', onEnd);
             }
             hotelsCollapsed = !hotelsCollapsed;
-            hotelsToggle.textContent = hotelsCollapsed ? 'Показать отели прицениться' : 'Скрыть отели прицениться';
+            hotelsToggle.textContent = hotelsCollapsed ? 'Показать карту отелей' : 'Скрыть карту отелей';
           });
         }
 
