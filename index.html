@@ -5,25 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Путешествие по Турции — план, билеты и бюджет</title>
     <meta name="description" content="Одностраничный сайт о путешествии в Турции с поиском авиабилетов." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
       :root {
         --bg: #0b1220;
+        --surface: #0f172a;
         --card: #ffffff;
         --text: #0b1220;
         --muted: #586174;
         --brand: #0C73FE;
+        --ring: #7cb2ff;
+        --card-border: rgba(2, 6, 23, 0.08);
+        --shadow-1: 0 1px 2px rgba(2, 6, 23, 0.06);
+        --shadow-2: 0 8px 24px rgba(2, 6, 23, 0.08);
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
         background: var(--bg);
         color: #fff;
         line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
       header { display: grid; gap: 8px; padding: 40px 0 16px; }
-      header h1 { margin: 0; font-size: 36px; }
+      header h1 { margin: 0; font-size: clamp(28px, 3.2vw, 40px); letter-spacing: -0.01em; }
       header p { margin: 0; color: #cbd5e1; }
 
       .grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
@@ -34,7 +44,8 @@
         color: var(--text);
         border-radius: 16px;
         padding: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border: 1px solid var(--card-border);
+        box-shadow: var(--shadow-1), var(--shadow-2);
       }
       .card h2 { margin: 0 0 10px; font-size: 22px; }
       .card p { margin: 0 0 12px; color: var(--muted); }
@@ -45,6 +56,14 @@
       a.btn {
         display: inline-block; background: var(--brand); color: #fff; text-decoration: none;
         padding: 10px 14px; border-radius: 10px; font-weight: 700;
+        transition: transform 80ms ease, box-shadow 200ms ease, background-color 200ms ease;
+        box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 1px 2px rgba(0,0,0,0.2);
+      }
+      a.btn:hover { transform: translateY(-1px); }
+      a.btn:active { transform: translateY(0); }
+      a.btn:focus-visible, .tab:focus-visible, .subnav a:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+      @supports not selector(:focus-visible) {
+        a.btn:focus, .tab:focus, .subnav a:focus { outline: 3px solid var(--ring); outline-offset: 3px; }
       }
 
       /* Generic badge */
@@ -139,6 +158,13 @@
       .hz-nav[disabled] { opacity: 0.4; cursor: default; }
       .hz-prev { left: -10px; }
       .hz-next { right: -10px; }
+      /* Horizontal scroll affordance */
+      .hz-slider::before,
+      .hz-slider::after { content: ""; position: absolute; top: 0; bottom: 0; width: 32px; pointer-events: none; transition: opacity 200ms ease; }
+      .hz-slider::before { left: 0; background: linear-gradient(to right, var(--bg), rgba(11,18,32,0)); opacity: 0; }
+      .hz-slider::after { right: 0; background: linear-gradient(to left, var(--bg), rgba(11,18,32,0)); opacity: 0; }
+      .hz-slider.can-scroll-left::before { opacity: 1; }
+      .hz-slider.can-scroll-right::after { opacity: 1; }
       /* Sticky subnav */
       .subnav { position: sticky; top: 0; z-index: 40; background: rgba(11,18,32,0.75); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.08); }
       .subnav .inner { display:flex; gap:8px; flex-wrap:wrap; padding: 10px 0; }
@@ -158,7 +184,7 @@
       /* Pricing TL;DR */
       .pricing-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
       @media (min-width: 900px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
-      .pricing-card { background: var(--card); color: var(--text); border-radius: 16px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
+      .pricing-card { background: var(--card); color: var(--text); border-radius: 16px; padding: 16px; border: 1px solid var(--card-border); box-shadow: var(--shadow-1), var(--shadow-2); display: flex; flex-direction: column; }
       .pricing-card .header { display:flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
       .pricing-card .title { font-weight: 800; font-size: 18px; }
       .pricing-card .badge { display:inline-block; background: rgba(12,115,254,0.12); color: var(--brand); border: 1px solid rgba(12,115,254,0.4); border-radius: 999px; padding: 4px 8px; font-weight: 800; font-size: 12px; }
@@ -170,6 +196,15 @@
       .icon-ok { background: #16a34a; color: #fff; }
       .icon-no { background: #ef4444; color: #fff; }
       .pricing-card .cta { margin-top: 12px; display:flex; gap:8px; flex-wrap:wrap; }
+      /* Tables */
+      table th, table td { padding: 8px 10px; border-bottom: 1px solid rgba(2, 6, 23, 0.06); }
+      table thead th { color: var(--muted); }
+
+      /* Motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+        #top-widgets, #hotels-widget, #dest-details { transition: none !important; }
+      }
     </style>
   </head>
   <body>
@@ -434,11 +469,11 @@
         </ul>
       </section>
       <div style="margin: 8px 0 24px; display:flex; gap:8px; flex-wrap:wrap;">
-        <a id="toggle-widgets" href="#" class="btn">Авиабилеты</a>
-        <a id="toggle-hotels" href="#" class="btn">Отели прицениться</a>
+        <a id="toggle-widgets" href="#" class="btn" role="button" aria-expanded="false" aria-controls="top-widgets">Авиабилеты</a>
+        <a id="toggle-hotels" href="#" class="btn" role="button" aria-expanded="false" aria-controls="hotels-widget">Отели прицениться</a>
       </div>
 
-      <section id="top-widgets" style="margin-top: 12px; margin-bottom: 24px; display: none; height: 0; opacity: 0;">
+      <section id="top-widgets" style="margin-top: 12px; margin-bottom: 24px; display: none; height: 0; opacity: 0;" aria-hidden="true">
         <section class="card">
           <h2>Перелёты в Стамбул · рил тайм от авиасейлс</h2>
           <div class="widget-box">
@@ -475,7 +510,7 @@
 
       
       
-      <section id="hotels-widget" class="card" style="margin-bottom: 24px; display: none; height: 0; opacity: 0;">
+      <section id="hotels-widget" class="card" style="margin-bottom: 24px; display: none; height: 0; opacity: 0;" aria-hidden="true">
         <h2>Карта отелей</h2>
         <p style="margin: 0 0 12px; color: var(--muted);">Бейоглу в Стамбуле, как Невский в Питере · Показаны отели <span style="color: red;">без фильтрации</span> по 2 спальням</p>
         <div class="widget-box" style="height: 520px;">
@@ -500,7 +535,7 @@
         </div>
         <div class="listing-grid" id="airbnb-list" role="tabpanel" aria-labelledby="airbnb" style="display: grid;">
           <article class="listing-card">
-            <img alt="Airbnb listing 1" src="imgs/airbnb/image1.png" />
+            <img alt="Airbnb listing 1" src="imgs/airbnb/image1.png" loading="lazy" decoding="async" />
             <div class="row">
               <div>
                 <strong>Airbnb · 2 гостя · Бейоглу</strong> <span class="badge" aria-label="Проверено: 2 спальни">Проверено: 2 спальни</span>
@@ -512,7 +547,7 @@
             </div>
           </article>
           <article class="listing-card">
-            <img alt="Airbnb listing 2" src="imgs/airbnb/image2.png" />
+            <img alt="Airbnb listing 2" src="imgs/airbnb/image2.png" loading="lazy" decoding="async" />
             <div class="row">
               <div>
                 <strong>Airbnb · 2 гостя · Бейоглу</strong> <span class="badge" aria-label="Проверено: 2 спальни">Проверено: 2 спальни</span>
@@ -526,7 +561,7 @@
         </div>
         <div class="listing-grid" id="booking-list" role="tabpanel" aria-labelledby="booking" style="display: none;">
           <article class="listing-card">
-            <img alt="Booking Ottoman Concept Taksim" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.booking.com/hotel/tr/ottoman-concept-taksim.html" />
+            <img alt="Booking Ottoman Concept Taksim" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.booking.com/hotel/tr/ottoman-concept-taksim.html" loading="lazy" decoding="async" />
             <div class="row">
               <div>
                 <strong>Ottoman Concept Taksim</strong> <span class="badge" aria-label="Проверено: 2 спальни">Проверено: 2 спальни</span>
@@ -538,7 +573,7 @@
             </div>
           </article>
           <article class="listing-card">
-            <img alt="Booking Patika Suites" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.booking.com/hotel/tr/apartment-patika-suites.html" />
+            <img alt="Booking Patika Suites" src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.booking.com/hotel/tr/apartment-patika-suites.html" loading="lazy" decoding="async" />
             <div class="row">
               <div>
                 <strong>Apartment Patika Suites</strong> <span class="badge" aria-label="Проверено: 2 спальни">Проверено: 2 спальни</span>
@@ -557,11 +592,11 @@
           <h2>Каппадокия — мастхев</h2>
         </div>
         <div class="cap-slider" id="cap-slider">
-          <img src="imgs/cappadocia/gettyimages-1474856123-640x640.jpg" alt="Cappadocia balloons 1" class="active"/>
-          <img src="imgs/cappadocia/istockphoto-1339815445-612x612.jpg" alt="Cappadocia balloons 2"/>
-          <img src="imgs/cappadocia/1000_F_400322393_233wcYTtlY7BY8knHpZo6qFEaayNTqhL.jpg" alt="Cappadocia balloons 3"/>
-          <img src="imgs/cappadocia/caption.jpg" alt="Cappadocia balloons 4"/>
-          <img src="imgs/cappadocia/colorful-hot-air-balloons-flying-rock-landscape-cappadocia-turkey_87498-238.avif" alt="Cappadocia balloons 5"/>
+          <img src="imgs/cappadocia/gettyimages-1474856123-640x640.jpg" alt="Cappадocia balloons 1" class="active" loading="lazy" decoding="async"/>
+          <img src="imgs/cappadocia/istockphoto-1339815445-612x612.jpg" alt="Cappадocia balloons 2" loading="lazy" decoding="async"/>
+          <img src="imgs/cappadocia/1000_F_400322393_233wcYTtlY7BY8knHpZo6qFEaayNTqhL.jpg" alt="Cappadocia balloons 3" loading="lazy" decoding="async"/>
+          <img src="imgs/cappadocia/caption.jpg" alt="Cappadocia balloons 4" loading="lazy" decoding="async"/>
+          <img src="imgs/cappadocia/colorful-hot-air-balloons-flying-rock-landscape-cappadocia-turkey_87498-238.avif" alt="Cappadocia balloons 5" loading="lazy" decoding="async"/>
         </div>
         <p class="hero-sub">Самое сердце — Гёреме. Смотреть на шары и летать на них. Цены зависят от сезона, обычно ~$200/чел за общий полёт.</p>
         <div class="hero-links" style="margin-bottom: 8px;">
@@ -588,42 +623,42 @@
           <div class="hz-viewport" id="hz-viewport">
             <div class="hz-track">
               <article class="hz-card">
-                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Istanbul" alt="Стамбул" />
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Istanbul" alt="Стамбул" loading="lazy" decoding="async" />
                 <div class="content">
                   <strong>Стамбул</strong>
                   <a class="btn" href="#" data-city="istanbul">Подробнее</a>
                 </div>
               </article>
               <article class="hz-card">
-                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Antalya" alt="Анталья" />
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Antalya" alt="Анталья" loading="lazy" decoding="async" />
                 <div class="content">
                   <strong>Анталья</strong>
                   <a class="btn" href="#" data-city="antalya">Подробнее</a>
                 </div>
               </article>
               <article class="hz-card">
-                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Izmir" alt="Измир" />
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Izmir" alt="Измир" loading="lazy" decoding="async" />
                 <div class="content">
                   <strong>Измир</strong>
                   <a class="btn" href="#" data-city="izmir">Подробнее</a>
                 </div>
               </article>
               <article class="hz-card">
-                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Bodrum" alt="Бодрум" />
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Bodrum" alt="Бодрум" loading="lazy" decoding="async" />
                 <div class="content">
                   <strong>Бодрум</strong>
                   <a class="btn" href="#" data-city="bodrum">Подробнее</a>
                 </div>
               </article>
               <article class="hz-card">
-                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Pamukkale" alt="Памуккале" />
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Pamukkale" alt="Памуккале" loading="lazy" decoding="async" />
                 <div class="content">
                   <strong>Памуккале</strong>
                   <a class="btn" href="#" data-city="pamukkale">Подробнее</a>
                 </div>
               </article>
               <article class="hz-card">
-                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Ephesus" alt="Эфес" />
+                <img src="https://image.thum.io/get/width/1000/crop/1000/noanimate/https://www.google.com/maps/place/Ephesus" alt="Эфес" loading="lazy" decoding="async" />
                 <div class="content">
                   <strong>Эфес</strong>
                   <a class="btn" href="#" data-city="ephesus">Подробнее</a>
@@ -633,7 +668,7 @@
           </div>
           
           <!-- Expandable details inside other-destinations -->
-          <div id="dest-details" style="display: none; height: 0; opacity: 0;">
+          <div id="dest-details" style="display: none; height: 0; opacity: 0;" aria-hidden="true">
             <div class="content-grid city-content" data-city="istanbul" style="display: none;">
               <section class="card">
                 <h2>Туры по Стамбулу</h2>
@@ -727,6 +762,7 @@
     </div>
     <script>
       (function () {
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         // Sticky subnav active link highlight
         const subnavLinks = Array.from(document.querySelectorAll('.subnav-link'));
         const sectionIds = subnavLinks.map(a => a.getAttribute('href')).filter(Boolean).map(h => h.slice(1));
@@ -784,7 +820,9 @@
         wrapper.style.display = 'none';
         wrapper.style.height = '0px';
         wrapper.style.opacity = '0';
+        wrapper.setAttribute('aria-hidden', 'true');
         toggle.textContent = 'Показать авиабилеты';
+        toggle.setAttribute('aria-expanded', 'false');
 
         toggle.addEventListener('click', function (e) {
             e.preventDefault();
@@ -805,6 +843,7 @@
                 }
               };
               wrapper.addEventListener('transitionend', onEnd);
+              wrapper.setAttribute('aria-hidden', 'false');
             } else {
               // collapse
               const start = wrapper.scrollHeight;
@@ -818,9 +857,11 @@
                 wrapper.removeEventListener('transitionend', onEnd);
               };
               wrapper.addEventListener('transitionend', onEnd);
+              wrapper.setAttribute('aria-hidden', 'true');
             }
             collapsed = !collapsed;
             toggle.textContent = collapsed ? 'Показать авиабилеты' : 'Скрыть авиабилеты';
+            toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
         });
 
         // Убран ховер‑ресайз: карточка всегда максимума
@@ -833,7 +874,9 @@
           hotelsWrapper.style.display = 'none';
           hotelsWrapper.style.height = '0px';
           hotelsWrapper.style.opacity = '0';
+          hotelsWrapper.setAttribute('aria-hidden', 'true');
           hotelsToggle.textContent = 'Показать карту отелей';
+          hotelsToggle.setAttribute('aria-expanded', 'false');
 
           hotelsToggle.addEventListener('click', function (e) {
             e.preventDefault();
@@ -853,6 +896,7 @@
                 }
               };
               hotelsWrapper.addEventListener('transitionend', onEnd);
+              hotelsWrapper.setAttribute('aria-hidden', 'false');
             } else {
               const start = hotelsWrapper.scrollHeight;
               hotelsWrapper.style.height = start + 'px';
@@ -865,9 +909,11 @@
                 hotelsWrapper.removeEventListener('transitionend', onEnd);
               };
               hotelsWrapper.addEventListener('transitionend', onEnd);
+              hotelsWrapper.setAttribute('aria-hidden', 'true');
             }
             hotelsCollapsed = !hotelsCollapsed;
             hotelsToggle.textContent = hotelsCollapsed ? 'Показать карту отелей' : 'Скрыть карту отелей';
+            hotelsToggle.setAttribute('aria-expanded', hotelsCollapsed ? 'false' : 'true');
           });
         }
 
@@ -875,7 +921,7 @@
 
         // Cappadocia slider
         const slider = document.getElementById('cap-slider');
-        if (slider) {
+        if (slider && !prefersReduced) {
           const slides = Array.from(slider.querySelectorAll('img'));
           let idx = 0;
           setInterval(() => {
@@ -887,11 +933,18 @@
 
         // Other destinations horizontal slider: touchpad/trackpad only; no nav buttons
         const viewport = document.getElementById('hz-viewport');
-        if (viewport) {
-          // Ensure native scroll works; no button bindings
-          // Keep a resize listener if needed in future
-          const onResize = () => {};
-          window.addEventListener('resize', onResize);
+        const hzContainer = document.querySelector('.hz-slider');
+        if (viewport && hzContainer) {
+          const updateAffordance = () => {
+            const maxScrollLeft = viewport.scrollWidth - viewport.clientWidth - 1;
+            const canLeft = viewport.scrollLeft > 0;
+            const canRight = viewport.scrollLeft < maxScrollLeft;
+            hzContainer.classList.toggle('can-scroll-left', canLeft);
+            hzContainer.classList.toggle('can-scroll-right', canRight);
+          };
+          viewport.addEventListener('scroll', updateAffordance, { passive: true });
+          window.addEventListener('resize', updateAffordance);
+          updateAffordance();
         }
 
         // Other destinations: details toggle inside the card
@@ -986,21 +1039,25 @@
               e.preventDefault();
               const city = btn.getAttribute('data-city');
               const isOpen = details.style.display !== 'none';
+              buttons.forEach(b => b.setAttribute('aria-expanded', 'false'));
               if (!isOpen) {
                 openCity = city;
                 expandDetails(city);
+                btn.setAttribute('aria-expanded', 'true');
               } else if (openCity === city) {
                 collapseDetails();
                 openCity = null;
               } else {
                 openCity = city;
                 resizeDetailsToCity(city);
+                btn.setAttribute('aria-expanded', 'true');
               }
               setButtonLabels();
             });
           });
 
           // init labels
+          buttons.forEach(b => b.setAttribute('aria-expanded', 'false'));
           setButtonLabels();
         }
       })();
